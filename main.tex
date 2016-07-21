@@ -52,6 +52,9 @@ The conclusions drawn may help guide the choice of fundamental frequency estimat
 \newpage
   \tableofcontents
 \newpage
+  \listoffigures
+  \listoftables
+\newpage
 
 \section{Introduction}
 
@@ -269,7 +272,7 @@ The structures of recurrent neural networks are rather flexible, depending on th
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{rnns.jpeg}
-  \caption{Various recurrent structures compared with MLP (leftmost).
+  \caption[Various recurrent structures compared with MLP.]{Various recurrent structures compared with MLP (leftmost).
     Each rectangle is a vector and arrows represent functions (e.g.\ matrix multiply).
     Input vectors are in red, output vectors are in blue and green vectors hold the RNN's state \protect\footnotemark.}
   \label{fig:rnns}
@@ -290,7 +293,7 @@ Long short-term memory network (LSTM) is a variant of RNN explicitly designed to
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{LSTM3-chain.png}
-  \caption{Details of an LSTM cell\protect\footnotemark.} \label{fig:lstm-intro}
+  \caption[Details of an LSTM cell.]{Details of an LSTM cell\protect\footnotemark.} \label{fig:lstm-intro}
 \end{figure}
 
 \footnotetext{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
@@ -537,7 +540,7 @@ In order to maintain the clear boundaries between voiced and unvoiced frames and
     \label{fig:f0s-real}
   \end{subfigure}
 
-  \caption{Wavesurfer is able to plot time series with connecting lines, analogous to linear interpolation.
+  \caption[Data plotting options in Wavesurfer.]{Wavesurfer is able to plot time series with connecting lines, analogous to linear interpolation.
     \textbf{The actual fundamental frequency values within steep areas are either zero or the neighboring nonzero value, not on the connecting lines.}}
   \label{fig:f0s}
 \end{figure}
@@ -642,7 +645,7 @@ Results are shown in Figure~\ref{fig:white-noise}.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{error_rates_white_noise_added.pdf}
-  \caption{Error rates when white noise is added.
+  \caption[Error rates when white noise is added.]{Error rates when white noise is added.
     White noise level corresponds to \(\lambda\).}
   \label{fig:white-noise}
 \end{figure}
@@ -691,7 +694,7 @@ In general, all the three fundamental frequency estimation algorithms are more e
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_martin.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_swipe.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_yin.pdf}
-  \caption{Error rates of the same algorithm when random noise is sampled from different audios.
+  \caption[Error rates of the same algorithm when random noise is sampled from different audios.]{Error rates of the same algorithm when random noise is sampled from different audios.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-same-algorithm}
 \end{figure}
@@ -703,7 +706,7 @@ In general, all the three fundamental frequency estimation algorithms are more e
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_factory2.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_pink.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_white.pdf}
-  \caption{Error rates of different algorithms when random noise is sampled from the same audio.
+  \caption[Error rates of different algorithms when random noise is sampled from the same audio.]{Error rates of different algorithms when random noise is sampled from the same audio.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-same-audio}
 \end{figure}
@@ -742,7 +745,7 @@ All the audio files need to be converted to RAW format first, which is also done
     \label{fig:snr-compare-0db}
   \end{subfigure}
 
-  \caption{Spectrogram, plot of estimated F0 values and waveform shown in Wavesurfer.
+  \caption[Visualization of distortions.]{Spectrogram, plot of estimated F0 values and waveform shown in Wavesurfer.
     From top to bottom, signal-to-noise ratios are 20, 10, 0 \si{dB} respectively.
     When the audio is highly distorted, lots of details in spectrogram and waveform are lost and it's really hard to do fundamental frequency estimation.}
   \label{fig:snr-compare}
@@ -813,7 +816,7 @@ On the contrast, the other four have, and mostly notable in \texttt{factory2.wav
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_martin.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_swipe.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_yin.pdf}
-  \caption{Error rates of the same algorithm when random noise at certain SNR is sampled from different audios.
+  \caption[Error rates of the same algorithm when random noise at certain SNR is sampled from different audios.]{Error rates of the same algorithm when random noise at certain SNR is sampled from different audios.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-snr-same-algorithm}
 \end{figure}
@@ -825,7 +828,7 @@ On the contrast, the other four have, and mostly notable in \texttt{factory2.wav
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_wrt_snr_factory2.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_wrt_snr_pink.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_wrt_snr_white.pdf}
-  \caption{Error rates of different algorithms when random noise at certain SNR is sampled from the same audio.
+  \caption[Error rates of different algorithms when random noise at certain SNR is sampled from the same audio.]{Error rates of different algorithms when random noise at certain SNR is sampled from the same audio.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-snr-same-audio}
 \end{figure}
@@ -971,7 +974,7 @@ This will be useful if we want to explore temporal dependencies.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.55\textwidth]{df.png}
-  \caption{A very small part of the \texttt{pandas} DataFrame storing our data for Martin's algorithm.
+  \caption[Data storage scheme.]{A very small part of the \texttt{pandas} DataFrame storing our data for Martin's algorithm.
     There are in total 60 columns (59-dimensional features plus one-dimensional label).
     The two-level hierarchical indexing consists of audio file basename and time offsets within the audio file.
     Audio files with additive noises have a \enquote{\texttt{\_distorted}} postfix.}
