@@ -89,13 +89,13 @@ We start from an important theorem linking confidence measures and neural networ
 \section{Fundamental frequency estimation algorithms}
 
 We focus on three widely used fundamental frequency estimation algorithms, namely Martin's algorithm \parencite{martin1982comparison}, SWIPE \parencite{camacho2007swipe} and YIN \parencite{de2002yin}.
-They are implemented in the \texttt{JSnoori} toolkit\footnote{http://jsnoori.loria.fr/}.
+They are implemented in the \texttt{JSnoori} toolkit\footnote{\url{http://jsnoori.loria.fr/}}.
 
 Fundamental frequency estimations are conducted \enquote{locally} at given time offsets using the information within a very short context window.
 F0 values change rapidly in audio files (most obvious for music) so the results are valid locally only, too.
 
 The implementations iterate through audio files, output estimated fundamental frequencies at time indices where the user has interest (usually defined through starting point and interval).
-The results can be visualized by software programs such as Wavesurfer\footnote{http://www.speech.kth.se/wavesurfer/} \parencite{sjolander2000wavesurfer}.
+The results can be visualized by software programs such as Wavesurfer\footnote{\url{http://www.speech.kth.se/wavesurfer/}} \parencite{sjolander2000wavesurfer}.
 
 \begin{figure}[htbp]
   \centering
@@ -276,7 +276,7 @@ The structures of recurrent neural networks are rather flexible, depending on th
   \label{fig:rnns}
 \end{figure}
 
-\footnotetext{http://karpathy.github.io/2015/05/21/rnn-effectiveness/}
+\footnotetext{\url{http://karpathy.github.io/2015/05/21/rnn-effectiveness/}}
 
 \begin{itemize}
   \item one to many: tasks such as generating captions from images.
@@ -294,7 +294,7 @@ Long short-term memory network (LSTM) is a variant of RNN explicitly designed to
   \caption[Details of an LSTM cell.]{Details of an LSTM cell\protect\footnotemark.} \label{fig:lstm-intro}
 \end{figure}
 
-\footnotetext{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
+\footnotetext{\url{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}}
 
 The cell state (horizontal line running through the top of the diagram) enables information to flow into the next time step freely.
 Any modification to the cell state is regulated by \enquote{gates}, composed of a \texttt{sigmoid} (\(\sigma\)) layer and a point-wise operation.
@@ -472,7 +472,7 @@ In the corpus, audio files are encoded in \texttt{WAV} format and the filename c
 Only microphone signals are used for testing.
 For any microphone signal file \texttt{mic\_*.wav}, the corresponding file containing reference values is \texttt{ref\_*.f0}, in CSV-like format.
 
-According to the default pitch extraction script and the Snack Sound Toolkit\footnote{http://www.speech.kth.se/snack/} manual, indices of the reference values start at \SI{16}{\milli\second} and have a uniform interval of \SI{10}{\milli\second} until the end.
+According to the default pitch extraction script and the Snack Sound Toolkit\footnote{\url{http://www.speech.kth.se/snack/}} manual, indices of the reference values start at \SI{16}{\milli\second} and have a uniform interval of \SI{10}{\milli\second} until the end.
 
 \section{Noise corpus}
 
@@ -495,7 +495,7 @@ They have the same duration of \SI{235}{\second}, resolution of \SI{16}{\bit} an
 \section{A unified sampling rate}
 
 \texttt{JSnoori} requires that input audio files are sampled at \SI{16}{\kilo\hertz}.
-We use \texttt{SoX}\footnote{http://sox.sourceforge.net/} to conduct the conversion.
+We use \texttt{SoX}\footnote{\url{http://sox.sourceforge.net/}} to conduct the conversion.
 
 \chapter{Empirical Analyses of the Algorithms} \label{emp-aly}
 
@@ -696,7 +696,7 @@ In general, all three fundamental frequency estimation algorithms are more easil
 
 \section{Add noise by signal-to-noise ratio}
 
-A tool named \texttt{FaNT - Filtering and Noise Adding Tool}\footnote{http://dnt.kr.hs-niederrhein.de/index964b.html} enables us to add a noise signal at a given signal-to-noise ratio (SNR), which makes the results (in \autoref{fig:snr}) easier to interpret and more numerically referable.
+A tool named \texttt{FaNT - Filtering and Noise Adding Tool}\footnote{\url{http://dnt.kr.hs-niederrhein.de/index964b.html}} enables us to add a noise signal at a given signal-to-noise ratio (SNR), which makes the results (in \autoref{fig:snr}) easier to interpret and more numerically referable.
 Noise signals are first sampled across the five noise files.
 All audio files need to be converted to RAW format first, which is also done by \texttt{SoX}.
 
