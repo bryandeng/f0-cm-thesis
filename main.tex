@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,titlepage]{article}
+\documentclass[11pt,a4paper]{report}
 
 \usepackage{fontspec}
   \setmainfont{TeX Gyre Pagella}
@@ -49,14 +49,12 @@ Changes in error rates as well as the different error types (deviation or error 
 The conclusions drawn may help guide the choice of fundamental frequency estimation algorithms depending on situations and needs.
 \end{abstract}
 
-\newpage
-  \tableofcontents
-\newpage
-  \listoffigures
-  \listoftables
-\newpage
+\tableofcontents
 
-\section{Introduction}
+\listoffigures
+\listoftables
+
+\chapter{Introduction}
 
 The two keywords of our work are \enquote{fundamental frequency} and \enquote{confidence measure}.
 
@@ -85,11 +83,9 @@ They also enable us to integrate the algorithms into bigger systems.
 
 We start from an important theorem linking confidence measures and neural network classifiers, then develop and evaluate confidence measures based on sophisticated neural network methods, which is shown in latter part of this report.
 
-\newpage
+\chapter{Background and Related Works}
 
-\section{Background and Related Works}
-
-\subsection{Fundamental Frequency Estimation Algorithms}
+\section{Fundamental frequency estimation algorithms}
 We focus on three widely used fundamental frequency estimation algorithms, namely Martin's algorithm \cite{martin1982comparison}, SWIPE \cite{camacho2007swipe} and YIN \cite{de2002yin}.
 They are implemented in the \texttt{JSnoori} toolkit\footnote{http://jsnoori.loria.fr/}.
 
@@ -105,14 +101,14 @@ The results can be visualized by softwares such as Wavesurfer\footnote{http://ww
   \caption{Spectrogram, plot of reference F0 values and waveform shown in Wavesurfer.} \label{fig:wavesurfer}
 \end{figure}
 
-\subsubsection{Common Problems in Fundamental Frequency Estimations}
+\subsection{Common problems in fundamental frequency estimations}
 
 \begin{itemize}
   \item Results doubling or halving with respect to correct values are not rarely seen in immature autocorrelation-based methods.
   \item Voiced/unvoiced decision is another common source of errors.
 \end{itemize}
 
-\subsubsection{Martin's Algorithm}
+\subsection{Martin's algorithm}
 
 Martin's algorithm is a spectral method which detects fundamental frequency by maximizing the intercorrelation between the power spectrum and a spectral comb.
 
@@ -147,7 +143,7 @@ It reaches maximum when the fundamental frequency of the comb \(\omega_p\) is eq
 Martin's algorithm is a really simple yet effective algorithm.
 \texttt{JSnoori} toolkit implements an enhanced version of Martin's algorithm which additionally takes energy histogram and voicing jumps into account, etc.
 
-\subsubsection{SWIPE}
+\subsection{SWIPE}
 
 The core idea of Sawtooth Waveform Inspired Pitch Estimator (SWIPE) is that \enquote{if a signal is periodic with fundamental frequency \(f\) , its spectrum must contain peaks at multiples of \(f\)  and valleys in between}.
 
@@ -174,7 +170,7 @@ By averaging over the first \(n\) peaks, we obtain the global APVD, which is to 
 There are other improvements such as blurring the harmonics, warping the spectrum and weighting the harmonics.
 Please refer to the cited long report for all the details.
 
-\subsubsection{YIN}
+\subsection{YIN}
 
 YIN is basically a correlation-like method working in time domain.
 
@@ -209,9 +205,9 @@ Absolute threshold, parabolic interpolation and best local estimate further impr
 
 \newpage
 
-\subsection{Neural Networks}
+\section{Neural networks}
 
-\subsubsection{Introduction to Neural Networks}
+\subsection{Introduction to neural networks}
 
 Mathematically speaking, (artificial) neural networks are multiple levels of non-linear operations.
 By adding more layers and more units within a layer, a deep network can represent functions of increasing complexity.
@@ -222,7 +218,7 @@ Neural networks (or more recently, \enquote{deep learning}) form a rich and dive
 A complete description is beyond our scope.
 In the following we will introduce the neural network methods involved in our work.
 
-\subsubsection{Multilayer Perceptron}
+\subsection{Multilayer perceptron}
 
 Multilayer perceptrons, also called feedforward neural networks, are basic but essential models in this field.
 They have one or more hidden layers between input and output layer.
@@ -253,7 +249,7 @@ It has several advantages over \(\mathrm{tanh}\), etc.
   \item sparse activation
 \end{itemize}
 
-\subsubsection{Recurrent Networks and Long Short-Term Memory}
+\subsection{Recurrent networks and long short-term memory}
 
 There are no feedback connections in multilayer perceptrons by which outputs of the model are fed back into itself.
 In order to remember information over time, recurrent connections must be adopted.
@@ -325,7 +321,7 @@ Then cell state is updated to \(C_t\) and new hidden output \(h_t\) is produced,
 
 \enquote{\(\cdot\)} is the dot product of two vectors and \enquote{\(*\)} is multiplying by scalar element-wise.
 
-\subsubsection{Training of Neural Networks}
+\subsection{Training of neural networks}
 
 Neural networks are usually trained using gradient-based optimization methods, to minimize the cost function (also called loss function).
 A cost function measures the quality of a particular set of parameters based on how well the induced scores agree with ground truth labels.
@@ -334,7 +330,7 @@ Parameters are updated by backpropagation, which is a way of computing gradients
 
 \newpage
 
-\subsection{Confidence Measures}
+\section{Confidence measures}
 
 While accuracy or average error rate have been used as standard metrics to characterize the performance of various systems, it is always useful to have a sense of correctness of each result.
 
@@ -355,7 +351,7 @@ or
 in Bayesian approach.
 \(c_i = 1\) means the class label is \(c_i\) for sample \(X\).
 
-\subsubsection{Confidence Measures in Speech Recognition}
+\subsection{Confidence measures in speech recognition}
 
 In speech processing, besides the task of fundamental frequency estimation, another remarkable use case of confidence measures is in the field of automatic speech recognition (ASR).
 
@@ -366,15 +362,11 @@ Researchers propose to calculate a score between 0 and 1, i.e.\ confidence measu
 A confidence measure can be calculated on every recognized word, indicating how likely it matches the audio segment, or on the whole result corresponding to the input utterance.
 It is vital for achieving \textit{robust speech recognition} and is still a trending topic.
 
-\subsubsection{Approaches to Confidence Measures}
+\subsection{Approaches to confidence measures}
 
 There are roughly three major categories of methods for computing confidence measures in ASR \cite{jiang2005confidence}.
 
-\bigskip
-
-\noindent \textbf{Combination of Predictor Features}
-
-\medskip
+\subsubsection{Combination of predictor features}
 
 Any feature can be called a predictor if its probabilistic distribution of correctly recognized words is clearly distinct from that of misrecognized words.
 The predictor features may have to be collected within the recognition process.
@@ -384,11 +376,7 @@ Some common predictor features include \textit{N-best related scores}, \textit{a
 Then all predictor features are combined in a certain way to generate a single score to indicate correctness of the recognition decision.
 This can be done by various popular machine learning algorithms but usually the combination methods cannot significantly improve over the best predictor feature.
 
-\bigskip
-
-\noindent \textbf{Hypothesis Testing}
-
-\medskip
+\subsubsection{Hypothesis testing}
 
 The confidence measure is formulated as a statistical hypothesis testing problem, under the framework of utterance verification.
 
@@ -403,11 +391,7 @@ Then two complementary hypotheses are proposed, namely null hypothesis \(H_0\) a
 Then test \(H_0\) against \(H_1\) to determine whether to accept the recognition result or reject it.
 The final solution ends up with calculating and evaluating likelihood ratio or Bayes factors.
 
-\bigskip
-
-\noindent \textbf{As Posterior Probability}
-
-\medskip
+\subsubsection{As posterior probability}
 
 Conventional ASR systems find the most likely sequence of words \(\hat{W}\) for acoustic observation \(X\) by \textit{maximum a posterior} decision rule.
 
@@ -429,7 +413,7 @@ So approximate methods are adopted.
 Usually, one word lattice or graph is generated by the ASR decoder for every utterance.
 Then the posterior probability of each recognized word or the entire hypothesized sentence can be calculated based on the word-graph from an additional post-processing stage.
 
-\subsubsection{Confidence Measure and Neural Network}
+\subsection{Confidence measure and neural network}
 
 As shown above, it is a complicated task to calculate the posterior probabilities \enquote{online} during speech recognition.
 
@@ -460,11 +444,9 @@ Under such framework, multiclass neural network classifiers are applicable for e
 And in our work about fundamental frequency estimation, it's a binary classification problem between \enquote{estimation is correct} and \enquote{estimation is incorrect}.
 What we want is the posterior probability for \enquote{estimation is correct}.
 
-\newpage
+\chapter{Corpora}
 
-\section{Corpora}
-
-\subsection{Speech Corpus}
+\section{Speech corpus}
 
 The Pitch Tracking Database from Graz University of Technology (PTDB-TUG) \cite{pirker2011pitch} is used throughout our work.
 
@@ -491,7 +473,7 @@ For any microphone signal file \texttt{mic\_*.wav}, the corresponding file conta
 
 According to the default pitch extraction script and the Snack Sound Toolkit\footnote{http://www.speech.kth.se/snack/}'s manual, indices of the reference values start at \SI{16}{\milli\second} and have a uniform interval of \SI{10}{\milli\second} until the end.
 
-\subsection{Noise Corpus}
+\section{Noise corpus}
 
 The PTDB-TUG corpus contains only clean signals recorded inside a recording studio.
 Additional noise audios are needed in latter steps of our work.
@@ -509,14 +491,12 @@ We pick five noise audio files from the NOISEX-92 corpus \cite{varga1993assessme
 
 They have the same duration of 235 seconds, resolution of 16 bits and sampling rate at \SI{19.98}{\kilo\hertz}.
 
-\subsection{A Unified Sampling Rate}
+\section{A unified sampling rate}
 
 \texttt{JSnoori} requires that input audio files are sampled at \SI{16}{\kilo\hertz}.
 We use \texttt{SoX}\footnote{http://sox.sourceforge.net/} to conduct the conversion.
 
-\newpage
-
-\section{Empirical Analyses of the Algorithms} \label{emp-aly}
+\chapter{Empirical Analyses of the Algorithms} \label{emp-aly}
 
 We conduct a series of empirical analyses of performance of the fundamental frequency estimation algorithms.
 This is done by altering the audio files in various ways, running the algorithms and comparing the results with reference values to calculate error rates.
@@ -552,7 +532,7 @@ Elaborated figures and statistics are provided.
 
 \newpage
 
-\subsection{Apply Offsets to Indices}
+\section{Apply offsets to indices}
 
 Fundamental frequency estimation algorithms usually compute features over a sliding window and use the centers of the windows as time indices for estimated values.
 This is sometimes inaccurate, the proper indices may deviate from the centers, and the specific offsets depend on the internal mechanisms and implementations of the algorithms, sometimes not explicitly stated in documentation.
@@ -586,7 +566,7 @@ We will apply these optimal offsets throughout the latter experiments.
 
 \newpage
 
-\subsection{Modify Signal Levels}
+\section{Modify signal levels}
 
 Error rates are expected to rise when signal levels are lowered.
 
@@ -618,7 +598,7 @@ Starting from \(2^{-3}\), enhanced Martin's algorithm decides that most of the f
 
 \newpage
 
-\subsection{Add Noises by Level}
+\section{Add noises by level}
 
 We then evaluate the effects of noises.
 \texttt{SoX} is used again to add noises to the original signals.
@@ -713,7 +693,7 @@ In general, all the three fundamental frequency estimation algorithms are more e
 
 \newpage
 
-\subsection{Add Noises by Signal-to-Noise Ratio}
+\section{Add noises by signal-to-noise ratio}
 
 A tool named \texttt{FaNT - Filtering and Noise Adding Tool}\footnote{http://dnt.kr.hs-niederrhein.de/index964b.html} enables us to add a noise signal at a given signal-to-noise ratio (SNR), which makes the results (in Figure~\ref{fig:snr}) easier to interpret and more numerically referable.
 Noises are first sampled across the five noise files.
@@ -833,16 +813,14 @@ On the contrast, the other four have, and mostly notable in \texttt{factory2.wav
   \label{fig:random-noise-snr-same-audio}
 \end{figure}
 
-\newpage
-
-\section{Confidence Measures on Fundamental Frequency Estimations}
+\chapter{Confidence Measures on Fundamental Frequency Estimations}
 
 As we have stated, none of the existing fundamental frequency estimation algorithms provide a confidence measure.
 
 We treat the prediction of correctness of existing algorithms' estimations as a binary classification problem (correct/incorrect) and design neural network classifiers to output a confidence value, based on the theorem introduced above.
 Of course, additional information besides estimated fundamental frequency is needed to make the classifiers accurate enough.
 
-\subsection{Features and Labels}
+\section{Features and labels}
 
 Each run of the fundamental frequency estimation algorithms generates a sample (feature-label pair) for supervised learning and for evaluation.
 
@@ -865,11 +843,11 @@ We use 0 for incorrect and 1 for correct.
 
 \newpage
 
-\subsection{Neural Network Architectures}
+\section{Neural network architectures}
 
 The underlying neural network architectures we designed are multilayer perceptron (MLP) and recurrent model with long short-term memory (LSTM) \cite{hochreiter1997long} to incorporate information from context while avoiding the problem with long-term dependencies.
 
-\subsubsection{MLP Classifier}
+\subsection{MLP classifier}
 
 \begin{mdframed}
 \noindent \textbf{MLP classifier} (Figure~\ref{fig:mlp-draw}):
@@ -906,7 +884,7 @@ Tuples like \texttt{(None, 59)} tell information about each layer:
 
 \newpage
 
-\subsubsection{LSTM Classifier}
+\subsection{LSTM classifier}
 
 \begin{mdframed}
 \noindent \textbf{LSTM classifier}:
@@ -938,7 +916,7 @@ Now the tuples have three elements:
 
 \newpage
 
-\subsubsection{Other Architectures}
+\subsection{Other architectures}
 
 We also investigated other classic architectures for sequence classification, for example, using a max-pooling or average-pooling layer to aggregate the sequence outputs of the LSTM cells, which is popular in the sentiment analysis task.
 
@@ -952,11 +930,9 @@ But in our experiments, despite a long time of tuning, it never outperforms the 
 
 The cause might be that neighboring time steps (neighboring estimations in our case) have much more complex patterns of dependency, while equal treatment and simple aggregation won't be able to discover them and actually hide the information from upcoming layers.
 
-\newpage
+\chapter{Experiments}
 
-\section{Experiments}
-
-\subsection{Data Preparation}
+\section{Data preparation}
 
 The fundamental frequency estimation algorithms have relatively low error rates on clean signals.
 If we train only on the original dataset, the resulting classifiers would be biased because of lack of negative samples.
@@ -994,7 +970,7 @@ Then the dataset is split into training and testing set (80\% to 20\%).
 
 Furthermore, the last 20\% of the training set are taken out and used as validation set.
 
-\subsection{Training}
+\section{Training}
 
 The models are trained using stochastic gradient descent (SGD) on mini-batches with binary cross-entropy as objective function.
 And class probability threshold for classification is set to 0.5 consistently.
@@ -1011,7 +987,7 @@ Various techniques from \cite{lecun2012efficient} and \cite{orr2003neural} are a
 
 The training takes several hours, up to half a day for each model and hyperparameter setting.
 
-\subsection{Testing}
+\section{Testing}
 
 When normalizing the training data to zero mean, unit variance on each dimension, we remove the mean value of each feature, then scale by dividing non-constant features by their standard deviation.
 
@@ -1026,9 +1002,7 @@ The resulting scaler, determined by such mean values and standard deviations cal
 After transformation, testing data are fed into the models with the same batch sizes as in training.
 The outputs will be used for evaluation of the models.
 
-\newpage
-
-\section{Results and Evaluation}
+\chapter{Results and Evaluation}
 
 We evaluate the performance of the classifiers trained on every algorithm's data by
 
@@ -1042,7 +1016,7 @@ We evaluate the performance of the classifiers trained on every algorithm's data
 \textbf{What needs to be clarified is that performance of the classifiers reflect qualities of the generated confidence measures, they are not necessarily related to performance of the fundamental frequency estimation algorithms.}
 \end{mdframed}
 
-\subsection{Metrics}
+\section{Metrics}
 
 There are four possible outcomes from a binary classifier, identified by comparing predicted results with ground truth.
 
@@ -1056,7 +1030,7 @@ There are four possible outcomes from a binary classifier, identified by compari
 We use \(tp\), \(fp\), \(fn\), \(tn\) to denote the number of samples in corresponding categories respectively.
 Other metrics are constructed based on these values.
 
-\subsubsection*{Test Accuracy}
+\subsection{Test accuracy}
 
 Test accuracy is the overall accuracy over the testing set.
 
@@ -1070,7 +1044,7 @@ In our binary classification problem, \enquote{positive} means \enquote{fundamen
 
 During the calculation of this metric, class probability thresholds are set to 0.5 for both classes, which means if the \texttt{sigmoid} activation value is greater than 0.5 then sample is classified as \enquote{positive}, otherwise \enquote{negative}.
 
-\subsubsection*{Receiver Operating Characteristic Curve}
+\subsection{Receiver operating characteristic curve}
 
 \begin{figure}[htbp]
   \centering
@@ -1096,7 +1070,7 @@ In reality, only a finite number of points on the curve can be obtained, so we c
 
 \textbf{As our confidence measures equal to the positive class probabilities, area under the ROC curve reflects objectively their performance over the whole value range (0-1).}
 
-\subsubsection*{Normalized Mutual Information}
+\subsection{Normalized mutual information}
 
 Normalized mutual information (NMI) measures agreement of class assignments.
 
@@ -1126,7 +1100,7 @@ So it doesn't matter which one of the two \(X\) and \(Y\) represent.
 
 \newpage
 
-\subsection{Input Sequence Length for LSTM Model}
+\section{Input sequence length for LSTM model}
 
 During our experimentation, a longer input sequence length (more time steps) in LSTM model gives better results, as shown in Table~\ref{tab:lstm-isl}.
 
@@ -1161,7 +1135,7 @@ The increasing performance proves that there are indeed long-term dependencies a
 
 \newpage
 
-\subsection{MLP Model versus LSTM Model}
+\section{MLP model versus LSTM model}
 
 Table~\ref{tab:metrics} reports best results for both neural network architectures until now.
 They are achieved when there are 128 nodes in both the MLP model's hidden layers and the LSTM model's recurrent layers.
@@ -1202,9 +1176,7 @@ Dropout rate is set to 0.5 uniformly.
     But at the same time we need to make sure the overall classifiers still estimate Bayesian probabilities.
 \end{itemize}
 
-\newpage
-
-\section{Conclusion}
+\chapter{Conclusion}
 
 We are the first in this field to tackle the problem of designing confidence measures for fundamental frequency estimations.
 
@@ -1213,7 +1185,7 @@ There is no need to modify the target fundamental frequency estimation algorithm
 
 Its excellent performance is demonstrated on several existing fundamental frequency estimation algorithms, which shows its utility value.
 
-\subsection*{Future Work}
+\section*{Future work}
 
 \begin{itemize}
   \item Bidirectional LSTMs may work even better by also looking \enquote{forwards} in the sequences.
@@ -1222,18 +1194,14 @@ Its excellent performance is demonstrated on several existing fundamental freque
   \item We may further investigate the possibility of using a convolutional neural network (CNN) to calculate the fundamental frequency values, working directly on the spectrogram.
 \end{itemize}
 
-\newpage
-
 \appendix
 
-\section{Appendix}
+\chapter{Appendix}
 
 We use \texttt{pandas} \cite{mckinney2010data} to do data preparation and \texttt{matplotlib} \cite{hunter2007matplotlib} for plotting.
 Neural networks are implemented using \texttt{Python} and \texttt{Keras} \cite{chollet2015keras} library.
 
 Some of the experiments are run on Grid'5000 \cite{balouek2012adding}.
-
-\newpage
 
 \printbibliography
 
