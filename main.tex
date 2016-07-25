@@ -8,7 +8,7 @@
 \usepackage{amsthm}
   \newtheorem*{theorem}{Theorem}
 \usepackage{amssymb}
-\usepackage[backend=biber]{biblatex}
+\usepackage[backend=biber,style=alphabetic,citestyle=authoryear]{biblatex}
   \addbibresource{references.bib}
 \usepackage{booktabs}
 \usepackage{commath}
@@ -86,14 +86,14 @@ We start from an important theorem linking confidence measures and neural networ
 \chapter{Background and Related Works}
 
 \section{Fundamental frequency estimation algorithms}
-We focus on three widely used fundamental frequency estimation algorithms, namely Martin's algorithm \cite{martin1982comparison}, SWIPE \cite{camacho2007swipe} and YIN \cite{de2002yin}.
+We focus on three widely used fundamental frequency estimation algorithms, namely Martin's algorithm \parencite{martin1982comparison}, SWIPE \parencite{camacho2007swipe} and YIN \parencite{de2002yin}.
 They are implemented in the \texttt{JSnoori} toolkit\footnote{http://jsnoori.loria.fr/}.
 
 Fundamental frequency estimations are conducted \enquote{locally} at given time offsets using the information within a very short context window.
 F0 values change rapidly in audio files (most obvious for music) so the results are valid locally only, too.
 
 The implementations iterate through audio files, output estimated fundamental frequencies at time indices where the user has interest (usually defined through starting point and interval).
-The results can be visualized by softwares such as Wavesurfer\footnote{http://www.speech.kth.se/wavesurfer/}\cite{sjolander2000wavesurfer}.
+The results can be visualized by softwares such as Wavesurfer\footnote{http://www.speech.kth.se/wavesurfer/} \parencite{sjolander2000wavesurfer}.
 
 \begin{figure}[htbp]
   \centering
@@ -282,7 +282,7 @@ The structures of recurrent neural networks are rather flexible, depending on th
   \item many to many: neural machine translation, neural network TTS, etc.
 \end{itemize}
 
-Bengio \cite{bengio1994learning} shows that, though theoretically possible, in practice it's very hard to tune vanilla RNNs to handle long-term dependencies.
+Bengio \parencite{bengio1994learning} shows that, though theoretically possible, in practice it's very hard to tune vanilla RNNs to handle long-term dependencies.
 
 Long short-term memory network (LSTM) is a variant of RNN explicitly designed to tackle the long-term dependency problem.
 
@@ -364,7 +364,7 @@ It is vital for achieving \textit{robust speech recognition} and is still a tren
 
 \subsection{Approaches to confidence measures}
 
-There are roughly three major categories of methods for computing confidence measures in ASR \cite{jiang2005confidence}.
+There are roughly three major categories of methods for computing confidence measures in ASR \parencite{jiang2005confidence}.
 
 \subsubsection{Combination of predictor features}
 
@@ -423,8 +423,7 @@ However, posterior probabilities may also be estimated \enquote{offline}, under 
 
 \begin{mdframed}
 \begin{theorem}
-  Bayesian probabilities are estimated when desired network outputs are 1 of M (one output unity, all others zero) and a squared-error or cross-entropy cost function is used.
-\cite{richard1991neural}
+  Bayesian probabilities are estimated when desired network outputs are 1 of M (one output unity, all others zero) and a squared-error or cross-entropy cost function is used. \parencite{richard1991neural}
 \end{theorem}
 \end{mdframed}
 
@@ -435,7 +434,7 @@ However, posterior probabilities may also be estimated \enquote{offline}, under 
     The class with the highest activation value (also between 0 and 1) gets output.
 \end{itemize}
 
-According to the theorem proved in \cite{richard1991neural}, \textbf{the above activation values estimate Bayesian a posteriori probabilities, acting directly as confidence measures}, as long as we choose squared-error or cross-entropy as cost function.
+According to the theorem proved in \parencite{richard1991neural}, \textbf{the above activation values estimate Bayesian a posteriori probabilities, acting directly as confidence measures}, as long as we choose squared-error or cross-entropy as cost function.
 
 \bigskip
 
@@ -448,12 +447,12 @@ What we want is the posterior probability for \enquote{estimation is correct}.
 
 \section{Speech corpus}
 
-The Pitch Tracking Database from Graz University of Technology (PTDB-TUG) \cite{pirker2011pitch} is used throughout our work.
+The Pitch Tracking Database from Graz University of Technology (PTDB-TUG) \parencite{pirker2011pitch} is used throughout our work.
 
-This dataset contains microphone and laryngograph signals of 20 English native speakers reading out sentences from the TIMIT corpus \cite{garofolo1993darpa}.
+This dataset contains microphone and laryngograph signals of 20 English native speakers reading out sentences from the TIMIT corpus \parencite{garofolo1993darpa}.
 Both microphone signals and laryngograph signals were recorded at \SI{48}{\kilo\hertz} sampling rate, 16 bits resolution, with the type of encoding signed PCM.
 
-Additionally, reference pitch trajectories extracted on the laryngograph signals using the RAPT algorithm \cite{talkin1995robust} are provided.
+Additionally, reference pitch trajectories extracted on the laryngograph signals using the RAPT algorithm \parencite{talkin1995robust} are provided.
 In total it has 4720 recorded utterances.
 
 It is the first audio corpus that meets the following requirements:
@@ -477,7 +476,7 @@ According to the default pitch extraction script and the Snack Sound Toolkit\foo
 
 The PTDB-TUG corpus contains only clean signals recorded inside a recording studio.
 Additional noise audios are needed in latter steps of our work.
-We pick five noise audio files from the NOISEX-92 corpus \cite{varga1993assessment}, which is often used in the field of automatic speech recognition.
+We pick five noise audio files from the NOISEX-92 corpus \parencite{varga1993assessment}, which is often used in the field of automatic speech recognition.
 
 \begin{itemize}
   \item \texttt{babble.wav}: 100 people speaking in a canteen and individual voices are slightly audible.
@@ -832,7 +831,7 @@ Various features are used by the classifiers, some of which are intermediate res
 \begin{itemize}
   \item energy of the signal
   \item three ranked candidate results, along with their correlation values
-  \item 40 cepstral coefficients and 12 Mel-frequency cepstral coefficients (MFCCs) \cite{mermelstein1976distance,davis1980comparison}
+  \item 40 cepstral coefficients and 12 Mel-frequency cepstral coefficients (MFCCs) \parencite{mermelstein1976distance,davis1980comparison}
 \end{itemize}
 
 \noindent \textbf{Labels}:
@@ -845,16 +844,16 @@ We use 0 for incorrect and 1 for correct.
 
 \section{Neural network architectures}
 
-The underlying neural network architectures we designed are multilayer perceptron (MLP) and recurrent model with long short-term memory (LSTM) \cite{hochreiter1997long} to incorporate information from context while avoiding the problem with long-term dependencies.
+The underlying neural network architectures we designed are multilayer perceptron (MLP) and recurrent model with long short-term memory (LSTM) \parencite{hochreiter1997long} to incorporate information from context while avoiding the problem with long-term dependencies.
 
 \subsection{MLP classifier}
 
 \begin{mdframed}
 \noindent \textbf{MLP classifier} (Figure~\ref{fig:mlp-draw}):
 \begin{itemize}
-  \item two dense layers of hidden units with ReLU \cite{nair2010rectified} activation function
+  \item two dense layers of hidden units with ReLU \parencite{nair2010rectified} activation function
   \item a single output unit with \texttt{sigmoid} activation
-  \item dropout \cite{srivastava2014dropout} layers to prevent overfitting
+  \item dropout \parencite{srivastava2014dropout} layers to prevent overfitting
 \end{itemize}
 \end{mdframed}
 
@@ -892,7 +891,7 @@ Tuples like \texttt{(None, 59)} tell information about each layer:
   \item two LSTM recurrent layers which encode temporal information and feed sequences of activation values into the next layers
   \item a dense layer assigns weights to values in the whole sequence
   \item a single output unit with \texttt{sigmoid} activation
-  \item dropout \cite{srivastava2014dropout} layers to prevent overfitting
+  \item dropout \parencite{srivastava2014dropout} layers to prevent overfitting
 \end{itemize}
 \end{mdframed}
 
@@ -975,12 +974,12 @@ Furthermore, the last 20\% of the training set are taken out and used as validat
 The models are trained using stochastic gradient descent (SGD) on mini-batches with binary cross-entropy as objective function.
 And class probability threshold for classification is set to 0.5 consistently.
 
-Various techniques from \cite{lecun2012efficient} and \cite{orr2003neural} are applied, though nowadays they are becoming standard procedures.
+Various techniques from \parencite{lecun2012efficient} and \parencite{orr2003neural} are applied, though nowadays they are becoming standard procedures.
 
 \begin{itemize}
   \item normalize the training data to zero mean, unit variance on each dimension
   \item learning rate decay
-  \item Nesterov momentum \cite{nesterov1983method}
+  \item Nesterov momentum \parencite{nesterov1983method}
   \item L1 or L2 regularization on the weights
   \item early-stopping using the validation set (if the performance on validation set drops after an epoch, stop updating the parameters immediately)
 \end{itemize}
@@ -1198,10 +1197,10 @@ Its excellent performance is demonstrated on several existing fundamental freque
 
 \chapter{Appendix}
 
-We use \texttt{pandas} \cite{mckinney2010data} to do data preparation and \texttt{matplotlib} \cite{hunter2007matplotlib} for plotting.
-Neural networks are implemented using \texttt{Python} and \texttt{Keras} \cite{chollet2015keras} library.
+We use \texttt{pandas} \parencite{mckinney2010data} to do data preparation and \texttt{matplotlib} \parencite{hunter2007matplotlib} for plotting.
+Neural networks are implemented using \texttt{Python} and \texttt{Keras} \parencite{chollet2015keras} library.
 
-Some of the experiments are run on Grid'5000 \cite{balouek2012adding}.
+Some of the experiments are run on Grid'5000 \parencite{balouek2012adding}.
 
 \printbibliography
 
