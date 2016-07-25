@@ -20,6 +20,7 @@
 \usepackage{mdframed}
 \usepackage{multirow}
 \usepackage{siunitx}
+  \sisetup{detect-all,binary-units}
 \usepackage{subcaption}
 \usepackage{todonotes}
 
@@ -35,7 +36,7 @@
 
 \begin{abstract}
 Fundamental frequency estimation acts as the basis of many applications related to speech or music, such as speaker recognition, development of speech synthesis voices and music information retrieval.
-Various algorithms working in time or frequency domain have been developed in the past and work quite well on good-quality signals.
+Various algorithms working in the time or frequency domain have been developed in the past and work quite well on good-quality signals.
 They become more error prone on lower-quality signals but none of them indicate how reliable the estimation results are, which is a crucial metric if the overall system makes decisions based on probabilities or multiple estimation algorithms are combined using ensemble methods.
 
 In our work, we tackle this problem by developing and evaluating confidence measures based on machine learning approaches for several existing fundamental frequency estimation algorithms.
@@ -44,7 +45,7 @@ Sophisticated neural network architectures, including long short-term memory net
 And numerous features computed on the signals and generated during estimations are used as input.
 
 Besides confidence measures, our work also illustrates some empirical analyses on the robustness of existing fundamental frequency estimation algorithms.
-The audio corpus is artificially distorted in a quantitatively controlled way, by modifying signal levels or adding certain types of noises at given signal-to-noise ratios, etc.
+Data from an audio corpus is artificially distorted in a quantitatively controlled way, by modifying signal levels or adding certain types of noise at given signal-to-noise ratios, etc.
 Changes in error rates as well as the different error types (deviation or error in voiced/unvoiced decisions) are visualized and the underlying causes are analyzed in detail.
 The conclusions drawn may help guide the choice of fundamental frequency estimation algorithms depending on situations and needs.
 \end{abstract}
@@ -61,16 +62,16 @@ The two keywords of our work are \enquote{fundamental frequency} and \enquote{co
 \bigskip
 
 Fundamental frequency, defined as the lowest frequency of a periodic waveform, is a vital measure in audio processing.
-It reflects speaker's gender and emotion, etc.\ in speech processing.
-And in any kind of content-based music processing, such as genre analysis, music retrieval and recommendation, fundamental frequency is the bridge between audio and musical note representations.
-Applications in these fields explicitly conduct fundamental frequency estimations in early stages or produce intermediate representations closely related to fundamental frequency, especially by using neural networks methods.
+It can reflect a speaker's gender, emotional state, etc.\ in speech processing.
+And in any kind of content-based music processing, such as genre analysis, music retrieval and recommendation, etc.\, fundamental frequency is the bridge between audio and musical note representations.
+Applications in these fields explicitly conduct fundamental frequency estimations in early stages or produce intermediate representations closely related to fundamental frequency, especially by using neural network methods.
 
 Real-life audio signals won't be perfectly periodic.
-Taken this into account, various fundamental frequency estimation algorithms working in time domain, frequency domain or both have been developed during the past decades.
+Taking this into account, various fundamental frequency estimation algorithms working in the time domain, frequency domain, or both have been developed over the past decades.
 There is no single ideal estimation algorithm until now because of the variety of aperiodicity.
 
-The original literature of existing fundamental frequency estimation algorithms usually reports average accuracies on clean signals, i.e.\ naturally generated sounds recorded by professional equipment.
-The error rates must be rising when the clean signals are distorted, but to what extent? Will there be difference between various algorithms' performance and what are the causes? We conduct a series of empirical analyses in \autoref{emp-aly} to uncover these.
+The original literature of existing fundamental frequency estimation algorithms usually reports average accuracies on clean signals, i.e.\, naturally generated sounds recorded by professional equipment.
+The error rates must be rising when the clean signals are distorted, but to what extent? Will there be differences between various algorithms' performance and what are the causes? We conduct a series of empirical analyses in \autoref{emp-aly} to uncover these.
 
 \bigskip
 
@@ -78,14 +79,15 @@ Then we move attention from average accuracies on a large audio corpus to the co
 This is formalized as confidence measure, a concept widely used in statistics and computer science.
 
 As far as we know, none of the existing fundamental frequency estimation algorithms provide confidence measures along with estimation results.
-It will be a meaningful piece of work to construct such confidence measures then better results can be obtained by combining existing estimation algorithms using ensemble methods.
+It will be a meaningful piece of work to construct such confidence measures, after which better results can be obtained by combining existing estimation algorithms using ensemble methods.
 They also enable us to integrate the algorithms into bigger systems.
 
-We start from an important theorem linking confidence measures and neural network classifiers, then develop and evaluate confidence measures based on sophisticated neural network methods, which is shown in latter part of this report.
+We start from an important theorem linking confidence measures and neural network classifiers, then develop and evaluate confidence measures based on sophisticated neural network methods, which is shown in the latter part of this thesis.
 
 \chapter{Background and Related Works}
 
 \section{Fundamental frequency estimation algorithms}
+
 We focus on three widely used fundamental frequency estimation algorithms, namely Martin's algorithm \parencite{martin1982comparison}, SWIPE \parencite{camacho2007swipe} and YIN \parencite{de2002yin}.
 They are implemented in the \texttt{JSnoori} toolkit\footnote{http://jsnoori.loria.fr/}.
 
@@ -93,18 +95,18 @@ Fundamental frequency estimations are conducted \enquote{locally} at given time 
 F0 values change rapidly in audio files (most obvious for music) so the results are valid locally only, too.
 
 The implementations iterate through audio files, output estimated fundamental frequencies at time indices where the user has interest (usually defined through starting point and interval).
-The results can be visualized by softwares such as Wavesurfer\footnote{http://www.speech.kth.se/wavesurfer/} \parencite{sjolander2000wavesurfer}.
+The results can be visualized by software programs such as Wavesurfer\footnote{http://www.speech.kth.se/wavesurfer/} \parencite{sjolander2000wavesurfer}.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{wavesurfer.png}
-  \caption{Spectrogram, plot of reference F0 values and waveform shown in Wavesurfer.} \label{fig:wavesurfer}
+  \caption{Spectrogram, plot of reference F0 values, and waveform shown in Wavesurfer.} \label{fig:wavesurfer}
 \end{figure}
 
-\subsection{Common problems in fundamental frequency estimations}
+\subsection{Common problems in fundamental frequency estimation}
 
 \begin{itemize}
-  \item Results doubling or halving with respect to correct values are not rarely seen in immature autocorrelation-based methods.
+  \item Results doubling or halving with respect to correct values are not infrequently seen in immature autocorrelation-based methods.
   \item Voiced/unvoiced decision is another common source of errors.
 \end{itemize}
 
@@ -135,17 +137,17 @@ The correlation between the modified power spectrum and the comb function is the
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{martin-algo.png}
-  \caption{Steps of Martin's algorithm (from the original literature).} \label{fig:martin-algo}
+  \caption{Steps of Martin's algorithm (from \parencite{martin1982comparison}).} \label{fig:martin-algo}
 \end{figure}
 
 It reaches maximum when the fundamental frequency of the comb \(\omega_p\) is equal to the fundamental frequency \(\omega_0\) in the power spectrum.
 
-Martin's algorithm is a really simple yet effective algorithm.
-\texttt{JSnoori} toolkit implements an enhanced version of Martin's algorithm which additionally takes energy histogram and voicing jumps into account, etc.
+Martin's algorithm is a simple yet effective algorithm.
+The \texttt{JSnoori} toolkit implements an enhanced version of Martin's algorithm which additionally takes the energy histogram and voicing jumps into account, etc.
 
 \subsection{SWIPE}
 
-The core idea of Sawtooth Waveform Inspired Pitch Estimator (SWIPE) is that \enquote{if a signal is periodic with fundamental frequency \(f\) , its spectrum must contain peaks at multiples of \(f\)  and valleys in between}.
+The core idea of Sawtooth Waveform Inspired Pitch Estimator (SWIPE) is that if a signal is periodic with fundamental frequency \(f\), its spectrum must contain peaks at multiples of \(f\)  and valleys in between.
 
 Since each peak is surrounded by two valleys, the average peak-to-valley distance (APVD) for the \(k\)-th peak is defined as
 
@@ -168,13 +170,13 @@ By averaging over the first \(n\) peaks, we obtain the global APVD, which is to 
 \end{equation}
 
 There are other improvements such as blurring the harmonics, warping the spectrum and weighting the harmonics.
-Please refer to the cited long report for all the details.
+Please refer to the cited long report \parencite{camacho2007swipe} for all the details.
 
 \subsection{YIN}
 
-YIN is basically a correlation-like method working in time domain.
+YIN is basically a correlation-like method working in the time domain.
 
-Traditional autocorrelation method chooses the highest non-zero-lag peak in the autocorrelation function (ACF, \autoref{eq:acf}) by exhaustive search within a range of lags.
+A traditional autocorrelation method chooses the highest non-zero-lag peak in the autocorrelation function (ACF, \autoref{eq:acf}) by exhaustive search within a range of lags.
 
 \begin{equation} \label{eq:acf}
   r_t (\tau) = \sum_{j=t+1}^{t+W} x_j x_{j+\tau}
@@ -184,15 +186,15 @@ Traditional autocorrelation method chooses the highest non-zero-lag peak in the 
 \(r_t (\tau)\) is the autocorrelation function of lag \(\tau\) calculated at time index \(t\), and \(W\) is the integration window size.
 
 It requires elaborated correction algorithms to work well, as the choice of range is vital.
-If the actual period lies out of the chosen range, double or half the correct value is obtained.
+If the actual period lies outside of the chosen range, double or half the correct value is obtained.
 
-YIN instead finds the period by minimizing the difference function \(d_t (\tau)\), which is much less sensitive to amplitude changes while ACF peak amplitudes grow with lag rather than remain constant when signal amplitude increases with time.
+YIN instead finds the period by minimizing the difference function \(d_t (\tau)\), which is much less sensitive to amplitude changes while ACF peak amplitudes grow with lag rather than remaining constant when the signal amplitude increases with time.
 
 \begin{equation}
   d_t (\tau) = \sum_{j=1}^W (x_j - x_{j+\tau})^2
 \end{equation}
 
-By changing the objective function into cumulative mean normalized difference function (\autoref{eq:cmndf}), YIN is free from the influence of a strong resonance at the first formant (F1) and eliminates the upper frequency limit of the search range.
+By changing the objective function into the cumulative mean normalized difference function (\autoref{eq:cmndf}), YIN is free from the influence of a strong resonance at the first formant (F1) and eliminates the upper frequency limit of the search range.
 
 \begin{equation} \label{eq:cmndf}
 d'_t (\tau) = \begin{cases}
@@ -260,16 +262,16 @@ Its chain-like structure is able to capture temporal dependencies.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{RNN-unrolled.png}
-  \caption{An unrolled simplest recurrent neural network.} \label{fig:rnn-intro}
+  \caption{An unrolled recurrent neural network.} \label{fig:rnn-intro}
 \end{figure}
 
-The structures of recurrent neural networks are rather flexible, depending on the task and especially what operations should be conducted on sequences.
+The structures of recurrent neural networks are rather flexible, depending on the task and especially on which operations should be conducted on sequences.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{rnns.jpeg}
   \caption[Various recurrent structures compared with MLP.]{Various recurrent structures compared with MLP (leftmost).
-    Each rectangle is a vector and arrows represent functions (e.g.\ matrix multiply).
+    Each rectangle is a vector and arrows represent functions (e.g.\, matrix multiply).
     Input vectors are in red, output vectors are in blue and green vectors hold the RNN's state \protect\footnotemark.}
   \label{fig:rnns}
 \end{figure}
@@ -295,8 +297,8 @@ Long short-term memory network (LSTM) is a variant of RNN explicitly designed to
 \footnotetext{http://colah.github.io/posts/2015-08-Understanding-LSTMs/}
 
 The cell state (horizontal line running through the top of the diagram) enables information to flow into the next time step freely.
-Any modification to the cell state is regulated by \enquote{gate}s, composed of a \texttt{sigmoid} (\(\sigma\)) layer and a point-wise operation.
-From left to right are \enquote{forget gate}, \enquote{input gate} and \enquote{output gate} respectively.
+Any modification to the cell state is regulated by \enquote{gates}, composed of a \texttt{sigmoid} (\(\sigma\)) layer and a point-wise operation.
+From left to right are \enquote{forget gate}, \enquote{input gate} and \enquote{output gate}, respectively.
 
 Forget gate decides the proportion \(f_t\) of previous cell state to keep, individually on each dimension.
 
@@ -353,14 +355,14 @@ in Bayesian approach.
 
 \subsection{Confidence measures in speech recognition}
 
-In speech processing, besides the task of fundamental frequency estimation, another remarkable use case of confidence measures is in the field of automatic speech recognition (ASR).
+In speech processing, besides the task of fundamental frequency estimation, another notable use case for confidence measures is the field of automatic speech recognition (ASR).
 
-Any applicable real-world ASR system must be able to distinguish out error prone results from its candidate outputs.
+Any applicable real-world ASR system must be able to distinguish error prone results from its candidate outputs.
 This requires the ASR systems to automatically assess reliability for every decision made by the systems.
-Researchers propose to calculate a score between 0 and 1, i.e.\ confidence measure, to quantify this reliability.
+Researchers propose to calculate a score between 0 and 1, i.e.\, confidence measure, to quantify this reliability.
 
-A confidence measure can be calculated on every recognized word, indicating how likely it matches the audio segment, or on the whole result corresponding to the input utterance.
-It is vital for achieving \textit{robust speech recognition} and is still a trending topic.
+A confidence measure can be calculated on every recognized word, indicating how likely it is to match the audio segment, or on the whole result corresponding to the input utterance.
+It is vital for achieving \emph{robust speech recognition} and is still a trending topic.
 
 \subsection{Approaches to confidence measures}
 
@@ -374,7 +376,7 @@ The predictor features may have to be collected within the recognition process.
 Some common predictor features include \textit{N-best related scores}, \textit{acoustic stability}, \textit{phoneme or word durations}, \textit{language model score} and \textit{parsing results}.
 
 Then all predictor features are combined in a certain way to generate a single score to indicate correctness of the recognition decision.
-This can be done by various popular machine learning algorithms but usually the combination methods cannot significantly improve over the best predictor feature.
+This can be done by various popular machine learning algorithms, but usually the combination methods cannot significantly improve over the best predictor feature.
 
 \subsubsection{Hypothesis testing}
 
@@ -407,17 +409,17 @@ Conventional ASR systems find the most likely sequence of words \(\hat{W}\) for 
 In theory, the posterior probability \(p(W|X)\) is a good confidence measure.
 
 However, most practical ASR systems ignore \(p(X)\) during decision making so raw ASR scores are inadequate.
-And actually it is impossible to margin over all combinations of words, phonemes, noises and other events to get \(p(X)\).
+And actually it is impossible to margin over all combinations of words, phonemes, noises, and other events to get \(p(X)\).
 
-So approximate methods are adopted.
+Therefore, approximate methods are adopted.
 Usually, one word lattice or graph is generated by the ASR decoder for every utterance.
 Then the posterior probability of each recognized word or the entire hypothesized sentence can be calculated based on the word-graph from an additional post-processing stage.
 
-\subsection{Confidence measure and neural network}
+\subsection{Confidence measures and neural networks}
 
 As shown above, it is a complicated task to calculate the posterior probabilities \enquote{online} during speech recognition.
 
-However, posterior probabilities may also be estimated \enquote{offline}, under the framework of classification, when we have ground truth telling whether the results are correct.
+However, posterior probabilities may also be estimated \enquote{offline}, under the framework of classification, when we have ground truth telling us whether the results are correct.
 
 \bigskip
 
@@ -428,7 +430,7 @@ However, posterior probabilities may also be estimated \enquote{offline}, under 
 \end{mdframed}
 
 \begin{itemize}
-  \item Neural network binary classifiers having only one node with \texttt{sigmoid} activation function in the output layer are able to output a value between 0 and 1 for classification decision.
+  \item Neural network binary classifiers having only one node with \texttt{sigmoid} activation function in the output layer, are able to output a value between 0 and 1 for classification decision.
     The higher the value, the more it favors the positive class.
   \item For multiclass classification problems, usually \texttt{softmax} activation function is used in the output layer.
     The class with the highest activation value (also between 0 and 1) gets output.
@@ -438,7 +440,7 @@ According to the theorem proved in \parencite{richard1991neural}, \textbf{the ab
 
 \bigskip
 
-Under such framework, multiclass neural network classifiers are applicable for estimating posterior probabilities for different candidate words.
+Under such a framework, multiclass neural network classifiers are applicable for estimating posterior probabilities for different candidate words.
 
 And in our work about fundamental frequency estimation, it's a binary classification problem between \enquote{estimation is correct} and \enquote{estimation is incorrect}.
 What we want is the posterior probability for \enquote{estimation is correct}.
@@ -447,13 +449,13 @@ What we want is the posterior probability for \enquote{estimation is correct}.
 
 \section{Speech corpus}
 
-The Pitch Tracking Database from Graz University of Technology (PTDB-TUG) \parencite{pirker2011pitch} is used throughout our work.
+The Pitch Tracking Database from Graz University of Technology (PTDB-TUG) \parencite{pirker2011pitch} is used throughout the remainder of this thesis.
 
 This dataset contains microphone and laryngograph signals of 20 English native speakers reading out sentences from the TIMIT corpus \parencite{garofolo1993darpa}.
-Both microphone signals and laryngograph signals were recorded at \SI{48}{\kilo\hertz} sampling rate, 16 bits resolution, with the type of encoding signed PCM.
+Both microphone signals and laryngograph signals were recorded at \SI{48}{\kilo\hertz} sampling rate, \SI{16}{\bit} resolution, with the type of encoding signed PCM.
 
 Additionally, reference pitch trajectories extracted on the laryngograph signals using the RAPT algorithm \parencite{talkin1995robust} are provided.
-In total it has 4720 recorded utterances.
+In total it has \num{4720} recorded utterances.
 
 It is the first audio corpus that meets the following requirements:
 
@@ -470,7 +472,7 @@ In the corpus, audio files are encoded in \texttt{WAV} format and the filename c
 Only microphone signals are used for testing.
 For any microphone signal file \texttt{mic\_*.wav}, the corresponding file containing reference values is \texttt{ref\_*.f0}, in CSV-like format.
 
-According to the default pitch extraction script and the Snack Sound Toolkit\footnote{http://www.speech.kth.se/snack/}'s manual, indices of the reference values start at \SI{16}{\milli\second} and have a uniform interval of \SI{10}{\milli\second} until the end.
+According to the default pitch extraction script and the Snack Sound Toolkit\footnote{http://www.speech.kth.se/snack/} manual, indices of the reference values start at \SI{16}{\milli\second} and have a uniform interval of \SI{10}{\milli\second} until the end.
 
 \section{Noise corpus}
 
@@ -483,12 +485,12 @@ We pick five noise audio files from the NOISEX-92 corpus \parencite{varga1993ass
   \item \texttt{factory1.wav}: recorded near plate-cutting and electrical welding equipment in a factory.
   \item \texttt{factory2.wav}: recorded in a car production hall.
   \item \texttt{pink.wav}: acquired by sampling high-quality analog noise generator (Wandel \& Goltermann).
-    Exhibits equal energy per 1/3 octave.
+    Exhibits equal energy per \SI{1/3}{octave}.
   \item \texttt{white.wav}: acquired by sampling high-quality analog noise generator (Wandel \& Goltermann).
     Exhibits equal energy per \si{\hertz} bandwidth.
 \end{itemize}
 
-They have the same duration of 235 seconds, resolution of 16 bits and sampling rate at \SI{19.98}{\kilo\hertz}.
+They have the same duration of \SI{235}{\second}, resolution of \SI{16}{\bit} and sampling rate at \SI{19.98}{\kilo\hertz}.
 
 \section{A unified sampling rate}
 
@@ -502,8 +504,8 @@ This is done by altering the audio files in various ways, running the algorithms
 
 Estimation results and reference values are technically time series at (usually) uniform intervals along the time axis of signals.
 They don't necessarily have the same starting point or interval.
-So we interpolate estimation results to obtain matching values at references' indices.
-In order to maintain the clear boundaries between voiced and unvoiced frames and avoid introducing erroneous interpolated intermediate values, and since the intervals are very short even in voiced areas, \textbf{nearest-neighbor interpolation} is applied all the time.
+So we interpolate estimation results to obtain matching values at reference indices.
+In order to maintain the clear boundaries between voiced and unvoiced frames and avoid introducing erroneous interpolated intermediate values, and since the intervals are very short even in voiced areas, \textbf{nearest-neighbor interpolation} is applied throughout.
 
 \begin{figure}[htbp]
   \centering
@@ -524,7 +526,7 @@ In order to maintain the clear boundaries between voiced and unvoiced frames and
   \label{fig:f0s}
 \end{figure}
 
-We set the maximum deviation percentage from reference values to be 20\%, within this range the estimation results are considered as correct.
+We set the maximum deviation percentage from reference values to be \SI{20}{\percent}, within this range the estimation results are considered correct.
 
 The different experiments we conduct are as follows.
 Elaborated figures and statistics are provided.
@@ -534,7 +536,7 @@ Elaborated figures and statistics are provided.
 \section{Apply offsets to indices}
 
 Fundamental frequency estimation algorithms usually compute features over a sliding window and use the centers of the windows as time indices for estimated values.
-This is sometimes inaccurate, the proper indices may deviate from the centers, and the specific offsets depend on the internal mechanisms and implementations of the algorithms, sometimes not explicitly stated in documentation.
+This is sometimes inaccurate, as the proper indices may deviate from the centers, and the specific offsets depend on the internal mechanisms and implementations of the algorithms, which are not always explicitly documented.
 
 We use grid search to empirically find the optimal offset for every algorithm implemented in \texttt{JSnoori}: before interpolating the estimation results, pick an offset from some range and apply it to all the indices.
 The optimal offset will minimize the error rate.
@@ -551,17 +553,17 @@ The optimal offsets we find are shown in \autoref{tab:offsets}.
 
 \begin{table}[htbp]
   \centering
-  \begin{tabular}{cccc}
+  \begin{tabular}{cSSS}
   	\toprule
-  	             Algorithm              & Martin's & SWIPE & YIN \\
+  	             Algorithm              & {Martin's} & {SWIPE} & {YIN} \\
   	\midrule
-  	Optimal offset (\si{\milli\second}) &    16    &  -4   &  6  \\
+  	Optimal offset (\si{\milli\second}) & 16         & -4      & 6     \\
   	\bottomrule
   \end{tabular}
   \caption{Optimal offsets for the three algorithms.} \label{tab:offsets}
 \end{table}
 
-We will apply these optimal offsets throughout the latter experiments.
+We will apply these optimal offsets throughout the following experiments.
 
 \newpage
 
@@ -583,28 +585,28 @@ The resulting error rates are plotted in \autoref{fig:levels}.
 
 \bigskip
 
-For all the three algorithms, error rates converge to about 23.56\% when signal level approaches zero.
-This is the proportion of voiced samples (i.e.\ values \( > \SI{0}{\hertz} \)) in reference values.
-\textbf{When signal level is very low, the algorithms output \SI{0}{\hertz} for all the data points, thus only the estimation results aligned to voiced reference values are wrong.}
+For all three algorithms, error rates converge to about \SI{23.56}{\percent} when signal level approaches zero.
+This is the proportion of voiced samples (i.e.\, values \( > \SI{0}{\hertz} \)) in reference values.
+\textbf{When signal level is very low, the algorithms output \SI{0}{\hertz} for all data points, thus only the estimation results aligned to voiced reference values are wrong.}
 
 \bigskip
 
 From the plot we can see that Martin's algorithm performs well when signal level is unmodified, but is very sensitive to further changes.
-On the contrast, SWIPE and YIN's performance are rather steady and the results are always usable since real-life signal level changes are much smaller.
+In contrast, SWIPE and YIN's performance are rather steady and the results are always usable since real-life signal level changes are much smaller.
 (Also, SWIPE works better than YIN in this task.) \textbf{This is because that enhanced Martin's algorithm explicitly takes energy of the signal into account while SWIPE and YIN do not.
 Starting from \(2^{-3}\), enhanced Martin's algorithm decides that most of the frames are unvoiced, which is overpessimistic.}
 \end{mdframed}
 
 \newpage
 
-\section{Add noises by level}
+\section{Add noise by level}
 
-We then evaluate the effects of noises.
-\texttt{SoX} is used again to add noises to the original signals.
+We then evaluate the effects of noise.
+\texttt{SoX} is used again to add noise types to the original signals.
 
 This is done by scaling the signal level of a noise file and then mixing it with the original audio file.
 To avoid clipping, we calculate the sum of peak amplitudes (maximum absolute value) of the two files before mixing.
-If it exceeds the largest value that can be represented (though clipping may not actually happen because the two maximums usually don't occur at the same time index), we apply another scaling on the two files.
+If it exceeds the largest value that can be represented (though clipping may not actually happen because the two maxima usually don't occur at the same time index), we apply another scaling on the two files.
 
 \begin{equation}
   Y = \alpha S + \alpha \lambda N, \quad
@@ -614,7 +616,7 @@ If it exceeds the largest value that can be represented (though clipping may not
   \end{cases}
 \end{equation}
 
-\(Y\), \(S\) and \(N\) are output, speech and noise signals respectively.
+\(Y\), \(S\) and \(N\) are output, speech, and noise signals, respectively.
 \(\alpha\) and \(\lambda\) are scale factors.
 \(\mathrm{pa}()\) is the function returning peak amplitude.
 
@@ -633,9 +635,9 @@ Then we randomly sample noises from the five noise audio files in the NOISEX-92 
 The last one is also white noise but with a different volume.
 
 Results are shown in \autoref{fig:random-noise-same-algorithm} and \autoref{fig:random-noise-same-audio}\footnote{Legends indicate \texttt{(noise, algorithm)} combinations.
-The same applies to all figures of this type.} These statistics objectively reflect three algorithms' robustness to different kinds of noises at real-life signal levels.
+The same applies to all figures of this type.} These statistics objectively reflect the three algorithms' robustness to different kinds of noise at real-life signal levels.
 
-Noise levels all correspond to \(\lambda\), the five noise audios have very different signal levels or volumes.
+Noise levels all correspond to \(\lambda\), the five noise signals have very different signal levels or volumes.
 
 \begin{mdframed}
 \textbf{Comment and Analysis} (\autoref{fig:white-noise})
@@ -645,12 +647,12 @@ Noise levels all correspond to \(\lambda\), the five noise audios have very diff
 Martin's algorithm is more resistant to distortion when the noise level is relatively low, and has better performance than SWIPE and YIN\@.
 Though its error rate continues rising afterwards, SWIPE and YIN's error rates converge to the proportion of voiced samples again so the results are meaningless, too.
 \textbf{This kind of \enquote{blowup} is again caused by enhanced Martin's algorithm's decision mechanism based on energy.
-More and more noise makes the signal saturated and enhanced Martin's algorithm does a lot of useless estimations on originally unvoiced frames.}
+More and more noise saturates the signal and enhanced Martin's algorithm does a lot of useless estimations on originally unvoiced frames.}
 
 \bigskip
 
 YIN's performance drops very quickly.
-\textbf{It is basically correlation-like so it's less robust to noise as the waveform changes drastically.}
+\textbf{It is basically correlation-like and therefore less robust to noise as the waveform changes drastically.}
 \end{mdframed}
 
 \begin{mdframed}
@@ -659,12 +661,12 @@ YIN's performance drops very quickly.
 \bigskip
 
 \autoref{fig:random-noise-same-algorithm} further verifies our first conclusion about \autoref{fig:white-noise}.
-The higher volume a noise audio has, the more quickly error rate of enhanced Martin's algorithm rises.
+The higher the volume of a noise signal, the more quickly the error rate of enhanced Martin's algorithm rises.
 \texttt{white.wav} has much lower volume than the white noise generated by \texttt{SoX}, so the error rate even doesn't change much all the way.
 
 \bigskip
 
-In general, all the three fundamental frequency estimation algorithms are more easily influenced by real-life noises than generated noises (\texttt{pink.wav} and \texttt{white.wav}) when the noises are of realistic volumes or \enquote{recorded as it is}.
+In general, all three fundamental frequency estimation algorithms are more easily influenced by real-life noise than generated noise signals (\texttt{pink.wav} and \texttt{white.wav}) when the noises are of realistic volumes or \enquote{recorded as it is}.
 
 \end{mdframed}
 
@@ -673,7 +675,7 @@ In general, all the three fundamental frequency estimation algorithms are more e
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_martin.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_swipe.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_yin.pdf}
-  \caption[Error rates of the same algorithm when random noise is sampled from different audios.]{Error rates of the same algorithm when random noise is sampled from different audios.
+  \caption[Error rates of the same algorithm when random noise is sampled from different audios.]{Error rates of the same algorithm when random noise is sampled from different audio signals.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-same-algorithm}
 \end{figure}
@@ -692,11 +694,11 @@ In general, all the three fundamental frequency estimation algorithms are more e
 
 \newpage
 
-\section{Add noises by signal-to-noise ratio}
+\section{Add noise by signal-to-noise ratio}
 
 A tool named \texttt{FaNT - Filtering and Noise Adding Tool}\footnote{http://dnt.kr.hs-niederrhein.de/index964b.html} enables us to add a noise signal at a given signal-to-noise ratio (SNR), which makes the results (in \autoref{fig:snr}) easier to interpret and more numerically referable.
-Noises are first sampled across the five noise files.
-All the audio files need to be converted to RAW format first, which is also done by \texttt{SoX}.
+Noise signals are first sampled across the five noise files.
+All audio files need to be converted to RAW format first, which is also done by \texttt{SoX}.
 
 \begin{figure}[htbp]
   \centering
@@ -724,13 +726,13 @@ All the audio files need to be converted to RAW format first, which is also done
     \label{fig:snr-compare-0db}
   \end{subfigure}
 
-  \caption[Visualization of distortions.]{Spectrogram, plot of estimated F0 values and waveform shown in Wavesurfer.
-    From top to bottom, signal-to-noise ratios are 20, 10, 0 \si{dB} respectively.
+  \caption[Visualization of distortions.]{Spectrogram, plot of estimated F0 values, and waveform shown in Wavesurfer.
+    From top to bottom, signal-to-noise ratios are \SIlist{20;10;0}{\deci\bel}, respectively.
     When the audio is highly distorted, lots of details in spectrogram and waveform are lost and it's really hard to do fundamental frequency estimation.}
   \label{fig:snr-compare}
 \end{figure}
 
-And we further distinguish between error types (\autoref{fig:snr-error-types}), which helps us analyze the drawbacks of the algorithms in certain circumstances.
+We further distinguish between error types (\autoref{fig:snr-error-types}), which helps us analyze the drawbacks of the algorithms under certain circumstances.
 Three types of errors are investigated, namely
 
 \begin{itemize}
@@ -745,32 +747,32 @@ Three types of errors are investigated, namely
   \caption{Stack plot of the three error types.} \label{fig:snr-error-types}
 \end{figure}
 
-When signal-to-noise ratio is fixed across different types of noises, it will be easier to investigate the effect of noise's acoustic property on fundamental frequency estimation.
+When the signal-to-noise ratio is fixed across different types of noise, it will be easier to investigate the effect of a noise signal's acoustic properties on fundamental frequency estimation.
 
-So next we sample random noises from the five files separately, \enquote{decomposed} \autoref{fig:random-noise-snr-same-algorithm} and \autoref{fig:random-noise-snr-same-audio} are provided.
+Next, we sample random noise from the five files separately, \enquote{decomposed} \autoref{fig:random-noise-snr-same-algorithm} and \autoref{fig:random-noise-snr-same-audio} are provided.
 
 \begin{mdframed}
 \textbf{Comment and Analysis} (\autoref{fig:snr} and \autoref{fig:snr-error-types})
 
 \bigskip
 
-SWIPE and YIN virtually only have \enquote{incorrectly unvoiced} errors.
-When the audio is highly distorted, SWIPE and YIN think that all frames are unvoiced while enhanced Martin's algorithm tends to do the opposite and introduce a lot of \enquote{incorrectly voiced} errors.
+SWIPE and YIN have virtually only \enquote{incorrectly unvoiced} errors.
+When the audio is highly distorted, SWIPE and YIN consider all frames to be unvoiced, while enhanced Martin's algorithm tends to do the opposite and introduce a lot of \enquote{incorrectly voiced} errors.
 At the same time, estimation results on voiced frames are more or less acceptable.
 
-\textbf{This phenomenon indicates that more sophisticated voiced or unvoiced decision mechanism can greatly improve all the three algorithms.}
+\textbf{This phenomenon indicates that a more sophisticated voiced or unvoiced decision mechanism can greatly improve all three algorithms.}
 \end{mdframed}
 
 \begin{mdframed}
 \textbf{Comment and Analysis} (\autoref{fig:random-noise-snr-same-algorithm} and \autoref{fig:random-noise-snr-same-audio})
 
-From \autoref{fig:random-noise-snr-same-algorithm} we can see that YIN performs badly under white noise while it has the least influence on enhanced Martin's algorithm and SWIPE\@.
-After comparing the spectrograms of the five noises, we conclude that \textbf{YIN is highly sensitive to high-frequency components in the noises}.
-\textbf{This makes sense again because that YIN is correlation-like.
-High-frequency noises totally smooth the audio signals.}
+From \autoref{fig:random-noise-snr-same-algorithm} we can see that YIN performs badly under white noise, which has the least influence on enhanced Martin's algorithm and SWIPE\@.
+After comparing the spectrograms of the five noise types, we conclude that \textbf{YIN is highly sensitive to high-frequency components in the noise}.
+\textbf{This makes sense again because YIN is correlation-like.
+High-frequency noise totally smoothes the audio signals.}
 
-YIN performs best under \texttt{babble.wav} noise and it doesn't have many high-frequency components.
-On the contrast, the other four have, and mostly notable in \texttt{factory2.wav} (sounds like from cut wheel machines).
+YIN performs best under \texttt{babble.wav} noise which doesn't have many high-frequency components.
+In contrast, the other four do, and most notably in \texttt{factory2.wav} (sounds from cut wheel machines).
 \end{mdframed}
 
 \begin{figure}[htbp]
@@ -795,7 +797,7 @@ On the contrast, the other four have, and mostly notable in \texttt{factory2.wav
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_martin.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_swipe.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_yin.pdf}
-  \caption[Error rates of the same algorithm when random noise at certain SNR is sampled from different audios.]{Error rates of the same algorithm when random noise at certain SNR is sampled from different audios.
+  \caption[Error rates of the same algorithm when random noise at certain SNR is sampled from different audios.]{Error rates of the same algorithm when random noise at certain SNR is sampled from different audio signals.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-snr-same-algorithm}
 \end{figure}
@@ -844,7 +846,7 @@ We use 0 for incorrect and 1 for correct.
 
 \section{Neural network architectures}
 
-The underlying neural network architectures we designed are multilayer perceptron (MLP) and recurrent model with long short-term memory (LSTM) \parencite{hochreiter1997long} to incorporate information from context while avoiding the problem with long-term dependencies.
+The underlying neural network architectures we designed are multilayer perceptron (MLP) and recurrent models with long short-term memory (LSTM) \parencite{hochreiter1997long} to incorporate information from context while avoiding the problem with long-term dependencies.
 
 \subsection{MLP classifier}
 
@@ -866,12 +868,12 @@ The underlying neural network architectures we designed are multilayer perceptro
 \autoref{fig:mlp} is the computation graph of our MLP classifier, given by the neural network library we use.
 Data flow from top to bottom.
 
-Tuples like \texttt{(None, 59)} tell information about each layer:
+Tuples like \texttt{(None, 59)} provide information about each layer:
 
 \begin{itemize}
   \item The first element is the batch size.
     \texttt{None} indicates that any positive integer may be expected.
-    But people usually use a power of 2 as batch size so that it is computationally efficient on the hardwares.
+    But people usually use a power of 2 as batch size so that it is computationally efficient.
   \item The second element is the dimension of input/output variable (for output variable it's also the number of nodes in that layer).
 \end{itemize}
 
@@ -901,7 +903,7 @@ Now the tuples have three elements:
 
 \begin{itemize}
   \item The first element is still the batch size.
-  \item The second element is the input sequence length/number of time steps.
+  \item The second element is the input sequence length (number of time steps).
     For an input sequence of length \(n\), we think the last sample has temporal dependencies upon samples of the previous \(n-1\) time steps.
     This is a hyperparameter and we try different values of it.
   \item Input/output variable dimension moves to the third position.
@@ -925,9 +927,9 @@ We also investigated other classic architectures for sequence classification, fo
   \caption{Mean-pooling (average-pooling) before output layer.} \label{fig:sentiment}
 \end{figure}
 
-But in our experiments, despite a long time of tuning, it never outperforms the MLP model.
+But in our experiments, despite prolonged tuning, it never outperforms the MLP model.
 
-The cause might be that neighboring time steps (neighboring estimations in our case) have much more complex patterns of dependency, while equal treatment and simple aggregation won't be able to discover them and actually hide the information from upcoming layers.
+The cause might be that neighboring time steps (neighboring estimations in our case) have much more complex patterns of dependency, while equal treatment and simple aggregation won't be able to discover them and actually hides the information from upcoming layers.
 
 \chapter{Experiments}
 
@@ -936,13 +938,13 @@ The cause might be that neighboring time steps (neighboring estimations in our c
 The fundamental frequency estimation algorithms have relatively low error rates on clean signals.
 If we train only on the original dataset, the resulting classifiers would be biased because of lack of negative samples.
 
-So during training and testing, distorted audio files obtained during the empirical analyses (signal-to-noise ratio at -5) are used in addition to the original dataset to balance the number of positive and negative samples.
-In total, there are around 7 million samples for each fundamental frequency estimation algorithm.
+So during training and testing, distorted audio files obtained during the empirical analyses (signal-to-noise ratio at \SI{-5}{\deci\bel}) are used in addition to the original dataset to balance the number of positive and negative samples.
+In total, there are approximately 7 million samples for each fundamental frequency estimation algorithm.
 
 \bigskip
 
-After preprocessing, they are stored in matrix-like data structures and each row is a sample, following the common practice of machine learning.
-There's an auxiliary index indicating which audio file they come from.
+After preprocessing, they are stored in matrix-like data structures where each row is a sample.
+An auxiliary index indicates which audio file they come from.
 Within the same audio file, samples are sorted in chronological order.
 This will be useful if we want to explore temporal dependencies.
 
@@ -952,27 +954,27 @@ This will be useful if we want to explore temporal dependencies.
   \caption[Data storage scheme.]{A very small part of the \texttt{pandas} DataFrame storing our data for Martin's algorithm.
     There are in total 60 columns (59-dimensional features plus one-dimensional label).
     The two-level hierarchical indexing consists of audio file basename and time offsets within the audio file.
-    Audio files with additive noises have a \enquote{\texttt{\_distorted}} postfix.}
+    Audio files with additive noises have a \enquote{\texttt{\_distorted}} suffix.}
   \label{fig:df}
 \end{figure}
 
-Then the dataset is split into training and testing set (80\% to 20\%).
+Then the dataset is split into training and testing sets (\SIrange[range-phrase=/]{80}{20}{\percent}).
 
 \begin{itemize}
-  \item MLP classifier: random sampling on all the rows, so the samples are shuffled.
-  \item LSTM classifier: in order to keep the temporal order of samples and avoid constructing invalid sequences across the boundaries of audio files, the split is done on audio file level.
-    Rows of the first 80\% audio files are taken out as a whole as training set.
+  \item MLP classifier: random sampling on all rows, so the samples are shuffled.
+  \item LSTM classifier: in order to maintain the temporal order of samples and avoid constructing invalid sequences across the boundaries of audio files, the split is done on the audio file level.
+    Rows from the first \SI{80}{\percent} audio files are taken out as a whole as the training set.
 
-    Then within each audio file, iterate through the rows and construct \enquote{sequential data} by prepending samples of the past time steps.
+    Then, within each audio file, iterate through the rows and construct \enquote{sequential data} by prepending samples of the past time steps.
     Length of the sequences is a hyperparameter, as we have stated.
 \end{itemize}
 
-Furthermore, the last 20\% of the training set are taken out and used as validation set.
+Furthermore, the last \SI{20}{\percent} of the training set are taken out and used as the validation set.
 
 \section{Training}
 
 The models are trained using stochastic gradient descent (SGD) on mini-batches with binary cross-entropy as objective function.
-And class probability threshold for classification is set to 0.5 consistently.
+Class probability threshold for classification is set to 0.5 consistently.
 
 Various techniques from \parencite{lecun2012efficient} and \parencite{orr2003neural} are applied, though nowadays they are becoming standard procedures.
 
@@ -990,15 +992,15 @@ The training takes several hours, up to half a day for each model and hyperparam
 
 When normalizing the training data to zero mean, unit variance on each dimension, we remove the mean value of each feature, then scale by dividing non-constant features by their standard deviation.
 
-The resulting scaler, determined by such mean values and standard deviations calculated on each dimension, must be applied to testing data or new data in production usage before feeding them into the models.
+The resulting scaler, determined by such mean values and standard deviations calculated on each dimension, must be applied to testing data or new data in production use before feeding them into the models.
 
 \bigskip
 
-\textbf{In this way, the very important assumption in machine learning that training and testing data are sampled from the same distribution still makes sense, because the same transformation is applied.}
+\textbf{In this way, the very important assumption in machine learning that training and testing data are sampled from the same distribution still holds, because the same transformation is applied.}
 
 \bigskip
 
-After transformation, testing data are fed into the models with the same batch sizes as in training.
+After transformation, the test data is fed into the models with the same batch sizes as during training.
 The outputs will be used for evaluation of the models.
 
 \chapter{Results and Evaluation}
@@ -1012,7 +1014,7 @@ We evaluate the performance of the classifiers trained on every algorithm's data
 \end{itemize}
 
 \begin{mdframed}
-\textbf{What needs to be clarified is that performance of the classifiers reflect qualities of the generated confidence measures, they are not necessarily related to performance of the fundamental frequency estimation algorithms.}
+\textbf{What needs to be clarified is that performance of the classifiers reflects qualities of the generated confidence measures, they are not necessarily related to performance of the fundamental frequency estimation algorithms.}
 \end{mdframed}
 
 \section{Metrics}
@@ -1067,7 +1069,7 @@ Area under the ROC curve can be interpreted as the probability that the classifi
 The ideal value is also 1.
 In reality, only a finite number of points on the curve can be obtained, so we construct trapezoids under the curve as an approximation to area.
 
-\textbf{As our confidence measures equal to the positive class probabilities, area under the ROC curve reflects objectively their performance over the whole value range (0-1).}
+\textbf{As our confidence measures are equal to the positive class probabilities, area under the ROC curve reflects objectively their performance over the whole value range (\numrange{0}{1}).}
 
 \subsection{Normalized mutual information}
 
@@ -1105,27 +1107,27 @@ During our experimentation, a longer input sequence length (more time steps) in 
 
 \begin{table}[htbp]
   \centering
-  \begin{tabular}{llccc}
+  \begin{tabular}{llSSS}
   	\toprule
-  	Model                                      & Tuned for & Accuracy & ROC-AUC &  NMI  \\
+  	Model                                      & Tuned for & {Accuracy} & {ROC-AUC} & {NMI} \\
   	\midrule
-  	\multirow{3}{*}{LSTM (sequence length: 2)} & Martin's  &  0.926   &  0.968  & 0.641 \\
-  	                                           & SWIPE     &  0.880   &  0.870  & 0.219 \\
-  	                                           & YIN       &  0.893   &  0.874  & 0.230 \\
+  	\multirow{3}{*}{LSTM (sequence length: 2)} & Martin's  & 0.926      & 0.968     & 0.641 \\
+  	                                           & SWIPE     & 0.880      & 0.870     & 0.219 \\
+  	                                           & YIN       & 0.893      & 0.874     & 0.230 \\
   	\midrule
-  	\multirow{3}{*}{LSTM (sequence length: 3)} & Martin's  &  0.932   &  0.971  & 0.659 \\
-  	                                           & SWIPE     &  0.883   &  0.878  & 0.238 \\
-  	                                           & YIN       &  0.901   &  0.889  & 0.272 \\
+  	\multirow{3}{*}{LSTM (sequence length: 3)} & Martin's  & 0.932      & 0.971     & 0.659 \\
+  	                                           & SWIPE     & 0.883      & 0.878     & 0.238 \\
+  	                                           & YIN       & 0.901      & 0.889     & 0.272 \\
   	\midrule
-  	\multirow{3}{*}{LSTM (sequence length: 4)} & Martin's  &  0.934   &  0.971  & 0.666 \\
-  	                                           & SWIPE     &  0.886   &  0.880  & 0.247 \\
-  	                                           & YIN       &  0.902   &  0.892  & 0.276 \\
+  	\multirow{3}{*}{LSTM (sequence length: 4)} & Martin's  & 0.934      & 0.971     & 0.666 \\
+  	                                           & SWIPE     & 0.886      & 0.880     & 0.247 \\
+  	                                           & YIN       & 0.902      & 0.892     & 0.276 \\
   	\bottomrule
   \end{tabular}
   \caption{Performance of the LSTM model when different input sequence lengths are applied during training and testing.} \label{tab:lstm-isl}
 \end{table}
 
-Each line in the table tells model's classification performance when trained on one of the fundamental frequency estimation algorithms' data.
+Each line in the table gives the model's classification performance when trained on one of the fundamental frequency estimation algorithms' data.
 
 \bigskip
 
@@ -1138,40 +1140,40 @@ The increasing performance proves that there are indeed long-term dependencies a
 
 \autoref{tab:metrics} reports best results for both neural network architectures until now.
 They are achieved when there are 128 nodes in both the MLP model's hidden layers and the LSTM model's recurrent layers.
-The dense layer in LSTM model has 64 nodes.
+The dense layer in the LSTM model has 64 nodes.
 Dropout rate is set to 0.5 uniformly.
 
 \begin{table}[htbp]
   \centering
-  \begin{tabular}{llccc}
+  \begin{tabular}{llSSS}
   	\toprule
-  	Model                                      & Tuned for & Accuracy & ROC-AUC &  NMI  \\
+  	Model                                      & Tuned for & {Accuracy} & {ROC-AUC} & {NMI} \\
   	\midrule
-  	\multirow{3}{*}{MLP}                       & Martin's  &  0.916   &  0.957  & 0.585 \\
-  	                                           & SWIPE     &  0.874   &  0.867  & 0.209 \\
-  	                                           & YIN       &  0.863   &  0.829  & 0.143 \\
+  	\multirow{3}{*}{MLP}                       & Martin's  & 0.916      & 0.957     & 0.585 \\
+  	                                           & SWIPE     & 0.874      & 0.867     & 0.209 \\
+  	                                           & YIN       & 0.863      & 0.829     & 0.143 \\
   	\midrule
-  	\multirow{3}{*}{LSTM (sequence length: 4)} & Martin's  &  0.934   &  0.971  & 0.666 \\
-  	                                           & SWIPE     &  0.886   &  0.880  & 0.247 \\
-  	                                           & YIN       &  0.902   &  0.892  & 0.276 \\
+  	\multirow{3}{*}{LSTM (sequence length: 4)} & Martin's  & 0.934      & 0.971     & 0.666 \\
+  	                                           & SWIPE     & 0.886      & 0.880     & 0.247 \\
+  	                                           & YIN       & 0.902      & 0.892     & 0.276 \\
   	\bottomrule
   \end{tabular}
   \caption{Metrics of the best-performing classifiers.} \label{tab:metrics}
 \end{table}
 
 \begin{itemize}
-  \item Our LSTM model outperforms MLP model everywhere as expected.
+  \item Our LSTM model outperforms the MLP model everywhere as expected.
     This shows the advantage of recurrent neural networks.
-  \item High accuracy and ROC-AUC values guarantee that our models will be highly applicable in production usage.
+  \item High accuracy and ROC-AUC values guarantee that our models will be highly applicable in production use.
   \item There are no baselines to compare with.
 
   \bigskip
 
   \item NMI results indicate that there is still margin for improvement regarding class assignment.
-    Certain type of error is \enquote{dominating} in spite of reference labels.
+    A certain type of error is \enquote{dominating} in spite of reference labels.
     It may just be \enquote{incorrectly voiced} error for enhanced Martin's algorithm and \enquote{incorrectly unvoiced} error for SWIPE and YIN.
   \item For now, our models are universal for any fundamental frequency estimation algorithm.
-    Special settings for certain algorithms, for example, a simple decision tree based on energy of signal will detect SWIPE and YIN's \enquote{incorrectly unvoiced} errors, thus help improve performance.
+    Special settings for certain algorithms, for example, a simple decision tree based on signal energy will detect SWIPE and YIN's \enquote{incorrectly unvoiced} errors, and thus help improve performance.
     But at the same time we need to make sure the overall classifiers still estimate Bayesian probabilities.
 \end{itemize}
 
@@ -1188,7 +1190,7 @@ Its excellent performance is demonstrated on several existing fundamental freque
 
 \begin{itemize}
   \item Bidirectional LSTMs may work even better by also looking \enquote{forwards} in the sequences.
-    It's reasonable that there are temporal dependencies on future time steps.
+    It's reasonable to assume that there are temporal dependencies on future time steps.
   \item Neural network regression models are able to output an estimated frequency along with the confidence, like an ensemble method, and estimated frequencies from various algorithms can be used as features.
   \item We may further investigate the possibility of using a convolutional neural network (CNN) to calculate the fundamental frequency values, working directly on the spectrogram.
 \end{itemize}
