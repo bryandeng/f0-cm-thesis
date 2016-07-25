@@ -563,9 +563,7 @@ The optimal offsets we find are shown in \autoref{tab:offsets}.
   \caption{Optimal offsets for the three algorithms.} \label{tab:offsets}
 \end{table}
 
-We will apply these optimal offsets throughout the following experiments.
-
-\newpage
+We apply these optimal offsets throughout the following experiments.
 
 \section{Modify signal levels}
 
@@ -589,15 +587,13 @@ For all three algorithms, error rates converge to about \SI{23.56}{\percent} whe
 This is the proportion of voiced samples (i.e.\, values \( > \SI{0}{\hertz} \)) in reference values.
 \textbf{When signal level is very low, the algorithms output \SI{0}{\hertz} for all data points, thus only the estimation results aligned to voiced reference values are wrong.}
 
-\bigskip
+\smallskip
 
 From the plot we can see that Martin's algorithm performs well when signal level is unmodified, but is very sensitive to further changes.
 In contrast, SWIPE and YIN's performance are rather steady and the results are always usable since real-life signal level changes are much smaller.
 (Also, SWIPE works better than YIN in this task.) \textbf{This is because that enhanced Martin's algorithm explicitly takes energy of the signal into account while SWIPE and YIN do not.
 Starting from \(2^{-3}\), enhanced Martin's algorithm decides that most of the frames are unvoiced, which is overpessimistic.}
 \end{mdframed}
-
-\newpage
 
 \section{Add noise by level}
 
@@ -820,6 +816,8 @@ As we have stated, none of the existing fundamental frequency estimation algorit
 
 We treat the prediction of correctness of existing algorithms' estimations as a binary classification problem (correct/incorrect) and design neural network classifiers to output a confidence value, based on the theorem introduced above.
 Of course, additional information besides estimated fundamental frequency is needed to make the classifiers accurate enough.
+
+\newpage
 
 \section{Features and labels}
 
