@@ -1177,6 +1177,52 @@ Dropout rate is set to 0.5 uniformly.
     But at the same time we need to make sure the overall classifiers still estimate Bayesian probabilities.
 \end{itemize}
 
+\newpage
+
+\section{Performance on distorted audio signals}
+
+To further investigate robustness of our models, the distorted audio corpus at different signal-to-noise ratios are used as extra testing data.
+
+\section{Performance on voiced and unvoiced segments}
+
+Samples can be categorized into voiced and unvoiced segments, based on whether the reference fundamental frequency is greater than zero or not.
+
+The three metrics are then calculated on voiced and unvoiced segments separately. Results are shown in \autoref{fig:distorted-testing-data-accuracy}, \autoref{fig:distorted-testing-data-roc-auc} and \autoref{fig:distorted-testing-data--nmi}.
+
+\begin{itemize}
+  \item Generally speaking, our classifiers work better on unvoiced segments. One possible explanation is that the feature space is much smaller for unvoiced segments, so it's easier for a classifier to generalize.
+  \item LSTM model outperforms MLP model on voiced segments, which confirms again the existence of temporal dependencies in our problem.
+  \item Non-mononicity in the curves indicates fluctuation in the size of feature space. The classification problem is most difficult when there is a moderate amount of noise.
+  \item Training on data at certain signal-to-noise ratio might be necessary depending on use cases.
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.65\textwidth]{classification_metrics_martin_accuracy.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_swipe_accuracy.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_yin_accuracy.pdf}
+  \caption{MLP model and LSTM model's accuracies on distorted testing audio signals}
+  \label{fig:distorted-testing-data-accuracy}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.65\textwidth]{classification_metrics_martin_roc_auc.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_swipe_roc_auc.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_yin_roc_auc.pdf}
+  \caption{MLP model and LSTM model's ROC AUCs on distorted testing audio signals}
+  \label{fig:distorted-testing-data-roc-auc}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.65\textwidth]{classification_metrics_martin_nmi.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_swipe_nmi.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_yin_nmi.pdf}
+  \caption{MLP model and LSTM model's NMIs on distorted testing audio signals}
+  \label{fig:distorted-testing-data--nmi}
+\end{figure}
+
 \chapter{Conclusion}
 
 We are the first in this field to tackle the problem of designing confidence measures for fundamental frequency estimations.
