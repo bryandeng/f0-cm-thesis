@@ -355,7 +355,7 @@ in Bayesian approach.
 
 \subsection{Confidence measures in speech recognition}
 
-In speech processing, besides the task of fundamental frequency estimation, another notable use case for confidence measures is the field of automatic speech recognition (ASR).
+In speech processing, confidence measures have been investigated since a long time ago and are commonly used in the field of automatic speech recognition (ASR).
 
 Any applicable real-world ASR system must be able to distinguish error prone results from its candidate outputs.
 This requires the ASR systems to automatically assess reliability for every decision made by the systems.
@@ -567,7 +567,7 @@ We apply these optimal offsets throughout the following experiments.
 
 \section{Modify signal levels}
 
-Error rates are expected to rise when signal levels are lowered.
+Because of the 16-bit integer representation of the signal values in the WAV files, when the signal level is lowered, the precision decreases, and consequently, it is expected that the accuracy of the fundamental frequency estimation will decrease, hence this set of experiments aims at better understanding how the various fundamental frequency estimation algorithms behave when the signal level is modified (lowered).
 
 \begin{figure}[htbp]
   \centering
@@ -990,7 +990,7 @@ The training takes several hours, up to half a day for each model and hyperparam
 
 When normalizing the training data to zero mean, unit variance on each dimension, we remove the mean value of each feature, then scale by dividing non-constant features by their standard deviation.
 
-The resulting scaler, determined by such mean values and standard deviations calculated on each dimension, must be applied to testing data or new data in production use before feeding them into the models.
+The resulting scaling, determined by such mean values and standard deviations calculated on each dimension, must be applied to testing data or new data in production use before feeding them into the models.
 
 \bigskip
 
@@ -998,7 +998,7 @@ The resulting scaler, determined by such mean values and standard deviations cal
 
 \bigskip
 
-After transformation, the test data is fed into the models with the same batch sizes as during training.
+After transformation, the testing data is fed into the models.
 The outputs will be used for evaluation of the models.
 
 \chapter{Results and Evaluation}
@@ -1021,9 +1021,17 @@ There are four possible outcomes from a binary classifier, identified by compari
 
 \begin{itemize}
   \item true positive, predicted as positive and actually positive
+
+    (The classifier predicts that the F0 estimation is correct, and the F0 estimation is actually correct.)
   \item false positive, predicted as positive but actually negative
+
+    (The classifier predicts that the F0 estimation is correct, but the F0 estimation is actually incorrect.)
   \item false negative, predicted as negative but actually positive
+
+    (The classifier predicts that the F0 estimation is incorrect, but the F0 estimation is actually correct.)
   \item true negative, predicted as negative and actually negative
+
+    (The classifier predicts that the F0 estimation is incorrect, and the F0 estimation is actually incorrect.)
 \end{itemize}
 
 We use \(tp\), \(fp\), \(fn\), \(tn\) to denote the number of samples in corresponding categories respectively.
@@ -1058,10 +1066,8 @@ The receiver operating characteristic (ROC) curve plots true positive rates vers
   false\ positive\ rate (fpr) & = \frac{fp}{fp+tn}
 \end{align*}
 
-Points on the ROC curve are obtained by setting different thresholds on class probabilities when making classification decisions (instead of fixing them at 0.5).
-For example, a classifier outputs 0.7 for being positive and 0.3 for being negative on a certain sample.
-If the threshold of positive class's probability is 0.6, then the sample is classified as positive.
-While the result will be negative if the threshold rises to 0.8.
+Points on the ROC curve are obtained by setting different thresholds on class probabilities when making classification decisions (instead of using a fixed threshold, which is set to 0.5 in the previous section).
+For example, assuming that a classifier outputs a confidence measure of 0.7 for a given sample, with a threshold of 0.6 the output will be assumed \enquote{positive}, whereas with a threshold of 0.8, the output will be assumed \enquote{negative}.
 
 Area under the ROC curve can be interpreted as the probability that the classifier will assign a higher score to a randomly chosen positive sample than to a randomly chosen negative sample.
 The ideal value is also 1.
@@ -1164,6 +1170,7 @@ Dropout rate is set to 0.5 uniformly.
     This shows the advantage of recurrent neural networks.
   \item High accuracy and ROC-AUC values guarantee that our models will be highly applicable in production use.
   \item There are no baselines to compare with.
+    As mentioned at the beginning of the thesis, there were no confidence measures proposed on estimated F0 values in the literature.
 
   \bigskip
 
