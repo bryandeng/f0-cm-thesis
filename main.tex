@@ -235,7 +235,9 @@ They have one or more hidden layers between input and output layer.
 
 Every node calculates the weighted sum of its inputs \(\mathbf{x}\) and apply some activation function \(f\) to get the output \(y\), \( y = f (\mathbf{w}^\intercal \mathbf{x} + b) \).
 
-Rectified linear unit (ReLU), defined as \(f(x) = \max(0, x)\), is the optimal choice for activation function inside MLP nowadays.
+\bigskip
+
+Rectified linear unit (ReLU) \parencite{nair2010rectified}, defined as \(f(x) = \max(0, x)\), is the optimal choice for activation function inside MLP nowadays.
 
 \begin{figure}[htbp]
   \centering
@@ -262,7 +264,7 @@ Its chain-like structure is able to capture temporal dependencies.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{RNN-unrolled.png}
-  \caption{An unrolled recurrent neural network.} \label{fig:rnn-intro}
+  \caption{Unrolling a recurrent node.} \label{fig:rnn-intro}
 \end{figure}
 
 The structures of recurrent neural networks are rather flexible, depending on the task and especially on which operations should be conducted on sequences.
@@ -284,7 +286,7 @@ The structures of recurrent neural networks are rather flexible, depending on th
   \item many to many: neural machine translation, neural network TTS, etc.
 \end{itemize}
 
-Bengio \parencite{bengio1994learning} shows that, though theoretically possible, in practice it's very hard to tune vanilla RNNs to handle long-term dependencies.
+Bengio \parencite{bengio1994learning} shows that, though theoretically possible, in practice it's very hard to tune vanilla RNNs (hidden output directly used in the next time step) to handle long-term dependencies.
 
 Long short-term memory network (LSTM) is a variant of RNN explicitly designed to tackle the long-term dependency problem.
 
@@ -328,7 +330,21 @@ Then cell state is updated to \(C_t\) and new hidden output \(h_t\) is produced,
 Neural networks are usually trained using gradient-based optimization methods, to minimize the cost function (also called loss function).
 A cost function measures the quality of a particular set of parameters based on how well the induced scores agree with ground truth labels.
 
+In classification settings, the typical cost function used is cross entropy,
+
+\begin{equation}
+  H(p, q) = - \sum_{x \in X} p(x) \log q(x),
+\end{equation}
+where \(p\) is the ground truth probability distribution of labels and \(q\) is the distribution output by the neural network.
+
+\bigskip
+
 Parameters are updated by backpropagation, which is a way of computing gradients of expressions through recursive application of chain rule.
+
+Modern neural networks often utilize dropout \parencite{srivastava2014dropout} to prevent overfitting: during training, one or more nodes are randomly \enquote{switched off} temporarily.
+Their weights won't be updated during that period, nor will they affect the learning of other nodes.
+They will be \enquote{switched on} again after some number of iterations.
+This is equal to learning an exponential number of \enquote{thinned} networks and averaging their predictions at testing time.
 
 \newpage
 
@@ -872,9 +888,9 @@ The underlying neural network architectures we designed are multilayer perceptro
 \begin{mdframed}
 \noindent \textbf{MLP classifier} (\autoref{fig:mlp-draw}):
 \begin{itemize}
-  \item two dense layers of hidden units with ReLU \parencite{nair2010rectified} activation function
+  \item two dense layers of hidden units with rectified linear unit (ReLU) activation function
   \item a single output unit with \texttt{sigmoid} activation
-  \item dropout \parencite{srivastava2014dropout} layers to prevent overfitting
+  \item dropout layers to prevent overfitting
 \end{itemize}
 \end{mdframed}
 
@@ -912,7 +928,7 @@ Tuples like \texttt{(None, 59)} provide information about each layer:
   \item two LSTM recurrent layers which encode temporal information and feed sequences of activation values into the next layers
   \item a dense layer assigns weights to values in the whole sequence
   \item a single output unit with \texttt{sigmoid} activation
-  \item dropout \parencite{srivastava2014dropout} layers to prevent overfitting
+  \item dropout layers to prevent overfitting
 \end{itemize}
 \end{mdframed}
 
@@ -927,6 +943,8 @@ Now the tuples have three elements:
     This is a hyperparameter and we try different values of it.
   \item Input/output variable dimension moves to the third position.
 \end{itemize}
+
+A \enquote{Flatten} layer concatenates vectors in the sequence into a single one, for the subsequent non-recurrent layer.
 
 \begin{figure}[htbp]
   \centering
