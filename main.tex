@@ -1214,10 +1214,10 @@ Dropout rate is set to 0.5 uniformly.
   \bigskip
 
   \item NMI results indicate that there is still margin for improvement regarding class assignment.
-    A certain type of error is \enquote{dominating} in spite of reference labels.
+    A certain type of fundamental frequency estimation error is \enquote{dominating} the negative samples, making it harder for classifiers to generalize to tell which are wrong estimations.
     It may just be \enquote{incorrectly voiced} error for enhanced Martin's algorithm and \enquote{incorrectly unvoiced} error for SWIPE and YIN.
   \item For now, our models are universal for any fundamental frequency estimation algorithm.
-    Special settings for certain algorithms, for example, a simple decision tree based on signal energy will detect SWIPE and YIN's \enquote{incorrectly unvoiced} errors, and thus help improve performance.
+    If we combine multiple algorithms, special settings for certain algorithms, for example, a decision tree based on signal energy may help detect SWIPE and YIN's potential \enquote{incorrectly unvoiced} errors, then the system can relies more on Martin's estimation.
     But at the same time we need to make sure the overall classifiers still estimate Bayesian probabilities.
 \end{itemize}
 
@@ -1225,19 +1225,60 @@ Dropout rate is set to 0.5 uniformly.
 
 \section{Performance on distorted audio signals}
 
-To further investigate robustness of our models, the distorted audio corpus at different signal-to-noise ratios are used as extra testing data.
+To further investigate the robustness of our models, the distorted audio corpus at different signal-to-noise ratios are used as extra testing data.
+
+For all combinations of fundamental frequency estimation algorithms and signal-to-noise ratios, the metrics of our MLP model and LSTM model are plotted together and compared.
+Classification accuracy, ROC AUC and NMI results are shown in \autoref{fig:distorted-testing-data-accuracy-whole}, \autoref{fig:distorted-testing-data-roc-auc-whole} and \autoref{fig:distorted-testing-data-nmi-whole} respectively.
+
+\begin{itemize}
+  \item Our models generalize well on new data.
+    There is no sharp decrease in performance when the signal-to-noise ratio changes.
+  \item LSTM model outperforms MLP model most of the time, which confirms again the existence of temporal dependencies in our problem.
+  \item Again, the NMI results have potential for improvement.
+\end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_martin_classification_accuracy.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_swipe_classification_accuracy.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_yin_classification_accuracy.pdf}
+  \caption{MLP model and LSTM model's accuracies on distorted testing audio signals.}
+  \label{fig:distorted-testing-data-accuracy-whole}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_martin_roc_auc.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_swipe_roc_auc.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_yin_roc_auc.pdf}
+  \caption{MLP model and LSTM model's ROC AUCs on distorted testing audio signals.}
+  \label{fig:distorted-testing-data-roc-auc-whole}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_martin_nmi.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_swipe_nmi.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_whole_yin_nmi.pdf}
+  \caption{MLP model and LSTM model's NMIs on distorted testing audio signals.}
+  \label{fig:distorted-testing-data-nmi-whole}
+\end{figure}
 
 \section{Performance on voiced and unvoiced segments}
 
 Samples can be categorized into voiced and unvoiced segments, based on whether the reference fundamental frequency is greater than zero or not.
 
-The three metrics are then calculated on voiced and unvoiced segments separately. Results are shown in \autoref{fig:distorted-testing-data-accuracy}, \autoref{fig:distorted-testing-data-roc-auc} and \autoref{fig:distorted-testing-data--nmi}.
+The three metrics are then calculated on voiced and unvoiced segments separately.
+Now four curves are plotted at a time.
+Results are shown in \autoref{fig:distorted-testing-data-accuracy-voicedness}, \autoref{fig:distorted-testing-data-roc-auc-voicedness} and \autoref{fig:distorted-testing-data-nmi-voicedness}.
 
 \begin{itemize}
-  \item Generally speaking, our classifiers work better on unvoiced segments. One possible explanation is that the feature space is much smaller for unvoiced segments, so it's easier for a classifier to generalize.
-  \item LSTM model outperforms MLP model on voiced segments, which confirms again the existence of temporal dependencies in our problem.
-  \item Non-mononicity in the curves indicates fluctuation in the size of feature space. The classification problem is most difficult when there is a moderate amount of noise.
-  \item Training on data at certain signal-to-noise ratio might be necessary depending on use cases.
+  \item Generally speaking, our classifiers work better on unvoiced segments.
+    One possible explanation is that the size of feature space (contains all possible values of the 59-dimensional machine learning features) is much smaller for unvoiced segments than for voiced segments, so it's easier for a classifier to generalize on data for unvoiced segments.
+  \item Non-monotonicity in the curves indicates fluctuation in the size of feature space.
+    The classification problem is most difficult when there is a moderate amount of noise.
+  \item Training on data at certain signal-to-noise ratio might be necessary depending on use cases, whether the user cares more about voiced or unvoiced segments.
+    Because intersecting curves are observed.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -1245,8 +1286,8 @@ The three metrics are then calculated on voiced and unvoiced segments separately
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_martin_classification_accuracy.pdf}
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_swipe_classification_accuracy.pdf}
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_yin_classification_accuracy.pdf}
-  \caption{MLP model and LSTM model's accuracies on distorted testing audio signals.}
-  \label{fig:distorted-testing-data-accuracy}
+  \caption{MLP model and LSTM model's accuracies on distorted testing audio signals (voiced and unvoiced segments).}
+  \label{fig:distorted-testing-data-accuracy-voicedness}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -1254,8 +1295,8 @@ The three metrics are then calculated on voiced and unvoiced segments separately
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_martin_roc_auc.pdf}
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_swipe_roc_auc.pdf}
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_yin_roc_auc.pdf}
-  \caption{MLP model and LSTM model's ROC AUCs on distorted testing audio signals.}
-  \label{fig:distorted-testing-data-roc-auc}
+  \caption{MLP model and LSTM model's ROC AUCs on distorted testing audio signals (voiced and unvoiced segments).}
+  \label{fig:distorted-testing-data-roc-auc-voicedness}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -1263,8 +1304,8 @@ The three metrics are then calculated on voiced and unvoiced segments separately
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_martin_nmi.pdf}
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_swipe_nmi.pdf}
   \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_yin_nmi.pdf}
-  \caption{MLP model and LSTM model's NMIs on distorted testing audio signals.}
-  \label{fig:distorted-testing-data--nmi}
+  \caption{MLP model and LSTM model's NMIs on distorted testing audio signals (voiced and unvoiced segments).}
+  \label{fig:distorted-testing-data-nmi-voicedness}
 \end{figure}
 
 \chapter{Conclusion}
