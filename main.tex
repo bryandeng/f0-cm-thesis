@@ -205,8 +205,6 @@ d'_t (\tau) = \begin{cases}
 
 Absolute threshold, parabolic interpolation and best local estimate further improve YIN's performance.
 
-\newpage
-
 \section{Neural networks}
 
 \subsection{Introduction to neural networks}
@@ -345,8 +343,6 @@ Modern neural networks often utilize dropout \parencite{srivastava2014dropout} t
 Their weights won't be updated during that period, nor will they affect the learning of other nodes.
 They will be \enquote{switched on} again after some number of iterations.
 This is equal to learning an exponential number of \enquote{thinned} networks and averaging their predictions at testing time.
-
-\newpage
 
 \section{Confidence measures}
 
@@ -547,8 +543,6 @@ We set the maximum deviation percentage from reference values to be \SI{20}{\per
 The different experiments we conduct are as follows.
 Elaborated figures and statistics are provided.
 
-\newpage
-
 \section{Apply offsets to indices}
 
 Fundamental frequency estimation algorithms usually compute features over a sliding window and use the centers of the windows as time indices for estimated values.
@@ -704,8 +698,6 @@ In general, all three fundamental frequency estimation algorithms are more easil
   \label{fig:random-noise-same-audio}
 \end{figure}
 
-\newpage
-
 \section{Add noise by signal-to-noise ratio}
 
 A tool named \texttt{FaNT - Filtering and Noise Adding Tool}\footnote{\url{http://dnt.kr.hs-niederrhein.de/index964b.html}} enables us to add a noise signal at a given signal-to-noise ratio (SNR), which makes the results (in \autoref{fig:snr}) easier to interpret and more numerically referable.
@@ -854,8 +846,6 @@ As we have stated, none of the existing fundamental frequency estimation algorit
 We treat the prediction of correctness of existing algorithms' estimations as a binary classification problem (correct/incorrect) and design neural network classifiers to output a confidence value, based on the theorem introduced above.
 Of course, additional information besides estimated fundamental frequency is needed to make the classifiers accurate enough.
 
-\newpage
-
 \section{Features and labels}
 
 Each run of the fundamental frequency estimation algorithms generates a sample (feature-label pair) for supervised learning and for evaluation.
@@ -876,8 +866,6 @@ Various features are used by the classifiers, some of which are intermediate res
 Labels are obtained when calculating error rates during the empirical analyses.
 We use 0 for incorrect and 1 for correct.
 \end{mdframed}
-
-\newpage
 
 \section{Neural network architectures}
 
@@ -918,8 +906,6 @@ Tuples like \texttt{(None, 59)} provide information about each layer:
   \caption{Computation graph of the MLP classifier.} \label{fig:mlp}
 \end{figure}
 
-\newpage
-
 \subsection{LSTM classifier}
 
 \begin{mdframed}
@@ -951,8 +937,6 @@ A \enquote{Flatten} layer concatenates vectors in the sequence into a single one
   \includegraphics[width=0.7\textwidth]{model-lstm.png}
   \caption{Computation graph of the LSTM classifier.} \label{fig:lstm}
 \end{figure}
-
-\newpage
 
 \subsection{Other architectures}
 
@@ -1142,8 +1126,6 @@ Then NMI can be applied.
 This metric is furthermore symmetric.
 So it doesn't matter which one of the two \(X\) and \(Y\) represent.
 
-\newpage
-
 \section{Input sequence length for LSTM model}
 
 During our experimentation, a longer input sequence length (more time steps) in LSTM model gives better results, as shown in \autoref{tab:lstm-isl}.
@@ -1176,8 +1158,6 @@ Each line in the table gives the model's classification performance when trained
 
 The increasing performance proves that there are indeed long-term dependencies and our LSTM model is capable of capturing them.
 \textbf{It may not be monotonically increasing when the input sequence length grows even longer.}
-
-\newpage
 
 \section{MLP model versus LSTM model}
 
@@ -1220,8 +1200,6 @@ Dropout rate is set to 0.5 uniformly.
     If we combine multiple algorithms, special settings for certain algorithms, for example, a decision tree based on signal energy may help detect SWIPE and YIN's potential \enquote{incorrectly unvoiced} errors, then the system can relies more on Martin's estimation.
     But at the same time we need to make sure the overall classifiers still estimate Bayesian probabilities.
 \end{itemize}
-
-\newpage
 
 \section{Performance on distorted audio signals}
 
