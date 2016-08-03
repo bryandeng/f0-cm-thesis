@@ -228,7 +228,7 @@ They have one or more hidden layers between input and output layer.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.5\textwidth]{mlp-example.jpg}
-  \caption{An example MLP network with one hidden layer} \label{fig:mlp-example}
+  \caption{An example MLP network with one hidden layer.} \label{fig:mlp-example}
 \end{figure}
 
 \enquote{Feedforward} means that information flows in one direction from input to output layer (forward).
@@ -544,7 +544,7 @@ The optimal offset will minimize the error rate.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{error_rates_vs_offsets.pdf}
-  \caption{Error rates under different offsets.} \label{fig:offsets}
+  \caption{F0 estimation error rates under different offsets.} \label{fig:offsets}
 \end{figure}
 
 \autoref{fig:offsets} shows the error rates when different offsets are applied.
@@ -572,7 +572,7 @@ Because of the 16-bit integer representation of the signal values in the WAV fil
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{error_rates_vs_signal_levels.pdf}
-  \caption{Error rates under different signal levels.} \label{fig:levels}
+  \caption{F0 estimation error rates under different signal levels.} \label{fig:levels}
 \end{figure}
 
 We use the \texttt{SoX} utility to adjust the signals to different levels (scale the signal values).
@@ -622,7 +622,7 @@ Results are shown in \autoref{fig:white-noise}.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{error_rates_white_noise_added.pdf}
-  \caption[Error rates when white noise is added.]{Error rates when white noise is added.
+  \caption[F0 estimation error rates when white noise is added.]{F0 estimation error rates when white noise is added.
     White noise level corresponds to \(\lambda\).}
   \label{fig:white-noise}
 \end{figure}
@@ -671,7 +671,7 @@ In general, all three fundamental frequency estimation algorithms are more easil
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_martin.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_swipe.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_yin.pdf}
-  \caption[Error rates of the same algorithm when random noise is sampled from different audios.]{Error rates of the same algorithm when random noise is sampled from different audio signals.
+  \caption[F0 estimation error rates for each algorithm when random noise is sampled from different audio signals.]{F0 estimation error rates for each algorithm (Martin's at the top, SWIPE in the middle, YIN at the bottom) when random noise is sampled from different audio signals.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-same-algorithm}
 \end{figure}
@@ -683,7 +683,7 @@ In general, all three fundamental frequency estimation algorithms are more easil
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_factory2.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_pink.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_white.pdf}
-  \caption[Error rates of different algorithms when random noise is sampled from the same audio.]{Error rates of different algorithms when random noise is sampled from the same audio.
+  \caption[F0 estimation error rates of the various algorithms for each type of noise.]{F0 estimation error rates of the various algorithms (Martin's represented by circles, SWIPE represented by squares, and YIN by diamonds) for each type of noise.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-same-audio}
 \end{figure}
@@ -699,8 +699,11 @@ All audio files need to be converted to RAW format first, which is also done by 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{error_rates_vs_snrs.pdf}
-  \caption{Error rates when random noise at certain SNR is added.} \label{fig:snr}
+  \caption{F0 estimation error rates when random noise at certain SNR is added.} \label{fig:snr}
 \end{figure}
+
+It can be seen from \autoref{fig:snr-compare} that when the audio is highly distorted, lots of details in spectrogram and waveform are lost and it's really hard to do fundamental frequency estimation.
+SWIPE and YIN tend to output \SI{0}{\hertz} for more and more frames when the signal-to-noise ratio is gradually reduced.
 
 \begin{figure}[htbp]
   \centering
@@ -722,9 +725,8 @@ All audio files need to be converted to RAW format first, which is also done by 
     \label{fig:snr-compare-0db}
   \end{subfigure}
 
-  \caption[Visualization of distortions.]{Spectrogram, plot of estimated F0 values, and waveform shown in Wavesurfer.
-    From top to bottom, signal-to-noise ratios are \SIlist{20;10;0}{\deci\bel}, respectively.
-    When the audio is highly distorted, lots of details in spectrogram and waveform are lost and it's really hard to do fundamental frequency estimation.}
+  \caption[Visualization of distortions.]{Spectrogram, three plots of estimated F0 values (by Martin's, SWIPE and YIN in order), and waveform shown in Wavesurfer.
+    From top to bottom, signal-to-noise ratios are \SIlist{20;10;0}{\deci\bel}, respectively.}
   \label{fig:snr-compare}
 \end{figure}
 
@@ -740,7 +742,7 @@ Three types of errors are investigated, namely
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{error_rates_vs_snrs_error_types.pdf}
-  \caption{Stack plot of the three error types.} \label{fig:snr-error-types}
+  \caption[Stack plot of the three error types.]{Stack plot of the three error types (red for \enquote{deviated}, yellow for \enquote{incorrectly voiced} and cyan for \enquote{incorrectly unvoiced}).} \label{fig:snr-error-types}
 \end{figure}
 
 When the signal-to-noise ratio is fixed across different types of noise, it will be easier to investigate the effect of a noise signal's acoustic properties on fundamental frequency estimation.
@@ -769,23 +771,42 @@ High-frequency noise totally smoothes the audio signals.}
 
 YIN performs best under \texttt{babble.wav} noise which doesn't have many high-frequency components.
 In contrast, the other four do, and most notably in \texttt{factory2.wav} (sounds from cut wheel machines).
+See \autoref{fig:noise-spectrogram}.
 \end{mdframed}
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}{0.7\textwidth}
+  \begin{subfigure}{\textwidth}
     \includegraphics[width=\textwidth]{babble-spectrogram}
     \caption{\texttt{babble.wav}}
     \label{fig:babble-spectrogram}
   \end{subfigure}
 
-  \begin{subfigure}{0.7\textwidth}
+  \begin{subfigure}{\textwidth}
+    \includegraphics[width=\textwidth]{factory1-spectrogram}
+    \caption{\texttt{factory1.wav}}
+    \label{fig:factory1-spectrogram}
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
     \includegraphics[width=\textwidth]{factory2-spectrogram}
     \caption{\texttt{factory2.wav}}
     \label{fig:factory2-spectrogram}
   \end{subfigure}
 
-  \caption{Spectrograms of \texttt{babble.wav} and \texttt{factory2.wav}.} \label{fig:noise-spectrogram}
+  \begin{subfigure}{\textwidth}
+    \includegraphics[width=\textwidth]{pink-spectrogram}
+    \caption{\texttt{pink.wav}}
+    \label{fig:pink-spectrogram}
+  \end{subfigure}
+
+  \begin{subfigure}{\textwidth}
+    \includegraphics[width=\textwidth]{white-spectrogram}
+    \caption{\texttt{white.wav}}
+    \label{fig:white-spectrogram}
+  \end{subfigure}
+
+  \caption{Spectrograms of the various types of noise.} \label{fig:noise-spectrogram}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -793,7 +814,7 @@ In contrast, the other four do, and most notably in \texttt{factory2.wav} (sound
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_martin.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_swipe.pdf}
   \includegraphics[width=0.65\textwidth]{error_rates_random_noise_wrt_snr_yin.pdf}
-  \caption[Error rates of the same algorithm when random noise at certain SNR is sampled from different audios.]{Error rates of the same algorithm when random noise at certain SNR is sampled from different audio signals.
+  \caption[F0 estimation error rates for each algorithm when random noise at certain SNR is sampled from different audio signals.]{F0 estimation error rates for each algorithm (Martin's at the top, SWIPE in the middle, YIN at the bottom) when random noise at certain SNR is sampled from different audio signals.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-snr-same-algorithm}
 \end{figure}
@@ -805,7 +826,7 @@ In contrast, the other four do, and most notably in \texttt{factory2.wav} (sound
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_wrt_snr_factory2.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_wrt_snr_pink.pdf}
   \includegraphics[width=0.49\textwidth]{error_rates_random_noise_wrt_snr_white.pdf}
-  \caption[Error rates of different algorithms when random noise at certain SNR is sampled from the same audio.]{Error rates of different algorithms when random noise at certain SNR is sampled from the same audio.
+  \caption[F0 estimation error rates of the various algorithms for each type of noise at certain SNR.]{F0 estimation error rates of the various algorithms (Martin's represented by circles, SWIPE represented by squares, and YIN by diamonds) for each type of noise at certain SNR\@.
     Subfigures have different y-axis limits.}
   \label{fig:random-noise-snr-same-audio}
 \end{figure}
@@ -948,7 +969,7 @@ This will be useful if we want to explore temporal dependencies.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.55\textwidth]{df.png}
+  \includegraphics[width=\textwidth]{df.png}
   \caption[Data storage scheme.]{A very small part of the \texttt{pandas} DataFrame storing our data for Martin's algorithm.
     There are in total 60 columns (59-dimensional features plus one-dimensional label).
     The two-level hierarchical indexing consists of audio file basename and time offsets within the audio file.
@@ -1203,28 +1224,28 @@ The three metrics are then calculated on voiced and unvoiced segments separately
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.65\textwidth]{classification_metrics_martin_accuracy.pdf}
-  \includegraphics[width=0.65\textwidth]{classification_metrics_swipe_accuracy.pdf}
-  \includegraphics[width=0.65\textwidth]{classification_metrics_yin_accuracy.pdf}
-  \caption{MLP model and LSTM model's accuracies on distorted testing audio signals}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_martin_classification_accuracy.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_swipe_classification_accuracy.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_yin_classification_accuracy.pdf}
+  \caption{MLP model and LSTM model's accuracies on distorted testing audio signals.}
   \label{fig:distorted-testing-data-accuracy}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.65\textwidth]{classification_metrics_martin_roc_auc.pdf}
-  \includegraphics[width=0.65\textwidth]{classification_metrics_swipe_roc_auc.pdf}
-  \includegraphics[width=0.65\textwidth]{classification_metrics_yin_roc_auc.pdf}
-  \caption{MLP model and LSTM model's ROC AUCs on distorted testing audio signals}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_martin_roc_auc.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_swipe_roc_auc.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_yin_roc_auc.pdf}
+  \caption{MLP model and LSTM model's ROC AUCs on distorted testing audio signals.}
   \label{fig:distorted-testing-data-roc-auc}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.65\textwidth]{classification_metrics_martin_nmi.pdf}
-  \includegraphics[width=0.65\textwidth]{classification_metrics_swipe_nmi.pdf}
-  \includegraphics[width=0.65\textwidth]{classification_metrics_yin_nmi.pdf}
-  \caption{MLP model and LSTM model's NMIs on distorted testing audio signals}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_martin_nmi.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_swipe_nmi.pdf}
+  \includegraphics[width=0.65\textwidth]{classification_metrics_voicedness_yin_nmi.pdf}
+  \caption{MLP model and LSTM model's NMIs on distorted testing audio signals.}
   \label{fig:distorted-testing-data--nmi}
 \end{figure}
 
